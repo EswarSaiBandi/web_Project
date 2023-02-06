@@ -1,0 +1,275 @@
+{% extends 'officials/base_officials.html' %}
+
+{% block title %}{{user_details.designation}} Home{% endblock title %}
+
+{% block content %}
+
+{% load static %}
+{% block style_link %}
+<link href="{% static 'officials/home.css' %}" rel="stylesheet">
+{% endblock style_link %}
+  
+<p style="text-align: center; font-size: large;">
+  Hello <b>{{user_details.name}}</b>, <b>{{user_details.designation}}</b> 
+  of {% if user_details.is_chief or user_details.is_hostel_office %} NIT Andhra Pradesh {% else %} {{user_details.block.name}}{% endif %}!
+</p>
+
+<div id="test-carousel" class="carousel slide text-center announcements" data-bs-ride="carousel">
+  <div class="carousel-inner">
+    {% for announcement in announce_obj %}
+    <div class="carousel-item" data-href="{{ announcement.document.url }}" data-bs-target="_blank">
+      <a style="text-decoration: None; color: #212529;" href="{{ announcement.document.url }}" target="_blank"><h2 class="test-text">{{ announcement.info }}</h2></a>
+    </div>
+    {% endfor %}
+  </div>
+  <button class="carousel-control-prev" type="button" data-bs-target="#test-carousel" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#test-carousel" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+</div>
+<br>
+<div class="row">
+  <div class="col-md" data-toggle="tooltip" title="Click to get list!">
+    <div class="card" id="present" data-toggle="collapse" data-target="#attendance_tables" aria-expanded="false"
+      aria-controls="attendance_tables">
+      <div class="row">
+        <div class="col-8">
+          <span class="row atttext">Number of inmates present.</span>
+          <span class="row"><span class="attnum">{{present|length}}</span><span
+              class="att_date px-4 d-flex align-items-end pb-2" style="color: beige;"></span></span>
+        </div>
+        <div class="col-4">
+          <span class="atticon"><i class="fa fa-user-plus"></i></span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md" data-toggle="tooltip" title="Click to get list!">
+    <div class="card" id="absent" data-toggle="collapse" data-target="#attendance_tables"
+      aria-controls="attendance_tables">
+      <div class="row">
+        <div class="col-8">
+          <span class="row atttext">Number of inmates absent.</span>
+          <span class="row"><span class="attnum">{{absent|length}}</span><span
+              class="att_date px-4 d-flex align-items-end pb-2" style="color: beige;"></span></span>
+          <script>
+            var mydate = new Date()
+            mydate.setDate(mydate.getDate() - 1);
+            var ele = document.getElementsByClassName('att_date');
+            for (var i = 0; i < ele.length; i++) {
+              ele[i].innerHTML = 'As of ' + mydate.toLocaleDateString("en-IN");
+            }
+          </script>
+        </div>
+        <div class="col-4">
+          <span class="atticon"><i class="fa fa-user-times"></i></span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <div class="col-md">
+    <div class="card" id="absent">
+      <div class="row">
+        <div class="col-8">
+          <span class="row atttext">Number of complaints pending.</span>
+          <span class="row attnum">{{complaints_pending|length}}</span>
+        </div>
+        <div class="col-4">
+          <span class="atticon"><i class="fa fa-font-awesome"></i></span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md">
+    <div class="card" id="comps">
+      <div class="row">
+        <div class="col-8">
+          <span class="row atttext">Number of complaints resolved.</span>
+          <span class="row attnum">{{complaints_resolved|length}}</span>
+        </div>
+        <div class="col-4">
+          <span class="atticon"><i class="fa fa-font-awesome"></i></span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md" data-toggle="tooltip" title="Click to get list!">
+    <div class="card" id="{% if outings|length == 0 %}present{% else %}absent{% endif %}" data-toggle="collapse" data-target="#outing_table" aria-expanded="false"
+      aria-controls="outing_table">
+      <div class="row">
+        <div class="col-8">
+          <span class="row atttext">Number of Outing Requests.</span>
+          <span class="row"><span class="attnum">{{outings|length}}</span><span
+              class="att_date px-4 d-flex align-items-end pb-2" style="color: beige;"></span></span>
+        </div>
+        <div class="col-4">
+          <span class="atticon"><i class="fa fa-map-marker" ></i></i></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<br>
+<div class="container-fluid collapse" id="attendance_tables">
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="text-center">List of Absentees</h2>
+      <div class="overflow-auto py-4 px-3">
+        <table class="table table-hover table-muted table-striped attendance_table">
+          <thead>
+            <tr>
+              <th>Roll No.</th>
+              <th>Name</th>
+              <th>Year</th>
+              <th>Branch</th>
+              <th>Block</th>
+              <th>Room</th>
+            </tr>
+          </thead>
+          <tbody>
+
+            {% for stud in absent %}
+            <tr>
+              <td>{{stud.student.regd_no}}</td>
+              <td>{{stud.student.name}}</td>
+              <td>{{stud.student.year}}</td>
+              <td>{{stud.student.branch}}</td>
+              <td>{{stud.student.block.short_name}}</td>
+              <td>{{stud.student.roomdetail.room}}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <h2 class="text-center">List of Present Students</h2>
+      <div class="overflow-auto py-4 px-3">
+        <table class="table table-hover table-muted table-striped attendance_table">
+          <thead>
+            <tr>
+              <th>Roll No.</th>
+              <th>Name</th>
+              <th>Year</th>
+              <th>Branch</th>
+              <th>Block</th>
+              <th>Room</th>
+            </tr>
+          </thead>
+          <tbody>
+
+            {% for stud in present %}
+            <tr>
+              <td>{{stud.student.regd_no}}</td>
+              <td>{{stud.student.name}}</td>
+              <td>{{stud.student.year}}</td>
+              <td>{{stud.student.branch}}</td>
+              <td>{{stud.student.roomdetail.block.short_name}}</td>
+              <td>{{stud.student.roomdetail.room}}</td>
+            </tr>
+            {% empty %}
+
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h2 style="text-align: center;">Complaints Registered</h2>
+<div class="overflow-auto p-4">
+  <table class="table table-hover table-muted table-striped " id="complaints_table">
+    <thead>
+      <tr class="text-center">
+        <th class="overflow-hidden">Roll No.</th>
+        <th class="overflow-hidden">Type</th>
+        <th class="overflow-hidden">Complainee</th>
+        <th class="overflow-hidden">Summary</th>
+        <th class="overflow-hidden">Last Updated</th>
+        <th class="overflow-hidden">Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in complaints_pending %}
+      <tr class="text-center" data-row-href="{% url 'complaints:complaint_detail' item.pk %}">
+        <td>{{item.entity}}</td>
+        <td>{{item.type}}</td>
+        <td>{{item.complainee}}</td>
+        <td>{{item.summary}}</td>
+        <td>{{item.updated_at|date:'d-m-Y'}}</td>
+        <td>{{item.status}}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<div class="container-fluid collapse" id="outing_table">
+<h2 style="text-align: center;">Outing Requests</h2>
+<div class="overflow-auto p-4">
+  <table class="table table-hover table-muted table-striped " >
+    <thead>
+      <tr class="text-center">
+          <th class="overflow-hidden">Regd No.</th>
+          <th class="overflow-hidden">Student Name</th>
+          <th class="overflow-hidden">Year</th>
+          <th class="overflow-hidden">Branch</th>
+          <th class="overflow-hidden">Phone</th>
+          <th class="overflow-hidden">Mode</th>
+          <th class="overflow-hidden">From</th>
+          <th class="overflow-hidden">To</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for outing in outings %}
+      <tr class="text-center" data-row-href="{% url 'officials:outing_detail' outing.pk %}">
+        <td>{{outing.student.regd_no}}</td>
+        <td>{{outing.student.name}}</td>
+        <td>{{outing.student.year}}</td>
+        <td>{{outing.student.branch}}</td>
+        <td>{{outing.student.phone}}</td>
+        <td>{{outing.type}}</td>
+        <td>{{outing.fromDate|date:'d-m-Y' }}</td>
+        <td>{{outing.toDate|date:'d-m-Y' }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+</div>
+
+{% endblock content %}
+
+{% block script_links %}  
+<script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>
+<script>
+$(document).ready(function(){
+  document.getElementsByClassName('carousel-item')[0].classList.add('active')
+});
+$(document).ready(function () {
+  $('table.attendance_table').DataTable({
+    "pageLength": 6,
+    "lengthChange": false,
+    "info": false,
+    "dom": '<"row"<f"col"><"col"p>>t'
+  });
+  $('#complaints_table').DataTable({
+    "pageLength": 6,
+    "lengthChange": false,
+  });
+
+  $('[data-toggle="tooltip"]').tooltip();
+});
+
+$('.carousel').carousel('cycle')
+</script>
+{% endblock script_links %}
+  

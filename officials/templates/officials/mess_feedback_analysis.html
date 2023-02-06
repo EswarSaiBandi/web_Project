@@ -1,0 +1,220 @@
+{% extends 'officials/base_officials.html' %}
+{% block title %}Mess Feedback Analysis{% endblock title %}
+{% load static %}
+{% block style_links %}
+<link rel="stylesheet" href="{% static 'officials/mess_feedback_analysis.css' %}">
+{% endblock style_links %}
+{% block content %} 
+<h2 class="text-center">Mess Feedback Analysis</h2>
+<hr>
+<form method="post">
+    {% csrf_token %}
+    <div class="row justify-content-center mt-4">
+        <div class="col-md-4 d-flex justify-content-center">
+            <div class="form-group">
+                <!-- <label for="by_range" class="">By Range:</label> -->
+                <label for="by_range_from_date" class="">From:</label>
+                <input type="date" name="by_range_from_date" id="by_from_date" value="{{ from_date }}">
+            </div>
+        </div>
+        <div class="col-md-4 d-flex justify-content-center">
+            <div class="form-group">
+                <!-- <label for="by_date" class="">By Date:</label>
+                <input type="date" name="by_date" id="by_date" value="{{ date }}"> -->
+                <label for="by_range_to_date" class="">To:</label>
+                <input type="date" name="by_range_to_date" id="by_to_date" value="{{ to_date }}">
+            </div>
+        </div>
+        <!-- <div class="col-md-4 d-flex justify-content-center">
+            <div class="form-group">
+                <label for="by_month" class="">By Month:</label>
+                <input type="month" name="by_month" id="by_month" value="{{ month }}" >
+            </div>
+        </div> -->
+        <div class="col-md-4 d-flex justify-content-center">
+            <div class="form-group">
+                <label for="by_year" class="">By Year:</label>
+                <input type="number" min="2015" max="" step="1" name="by_year" id="by_year" value="{{ year }}">
+            </div>
+        </div>
+        <div class="col-md-4 d-flex justify-content-center">
+            <div class="form-group">
+                <label for="by_type" class="">Session:</label>
+                <select name="by_type" class="select form-control" id="id_type" required> 
+                    <option value="" selected>---------</option> 
+                    <option value="Breakfast">Breakfast</option> 
+                    <option value="Lunch">Lunch</option> 
+                    <option value="Snacks">Snacks</option> 
+                    <option value="Dinner">Dinner</option>
+                    <option value="all">Comprehend All</option>
+                </select> 
+            </div>
+        </div>
+        <div class="col-md-4 d-flex justify-content-center">
+            <div class="form-group">
+                <label for="by_day" class="">Day:</label>
+                <select name="by_day" class="select form-control" id="id_day"> 
+                    <option value="" selected>---------</option> 
+                    <option value="1">Sunday</option> 
+                    <option value="2">Monday</option> 
+                    <option value="3">Tuesday</option> 
+                    <option value="4">Wednesday</option>
+                    <option value="5">Thursday</option>
+                    <option value="6">Friday</option>
+                    <option value="7">Saturday</option>
+                </select> 
+            </div>
+        </div>
+    </div>
+    <div class="row justify-content-center mb-5">
+    <div class="col-12 col-md-4 text-center">
+        <input type="submit" class="btn btn-primary">
+        <!-- <a data-toggle="collapse" href="#analysisCollapse" class="btn btn-primary" id="view-btn">
+        </a> -->
+    </div>
+</div>
+</form>
+{% if rating %}
+<div class="col-12">
+<div class="row my-3 justify-content-center">
+    <div class="col-md-5 border py-3 mr-md-4">
+        <h4 class="text-center border-bottom border-secondary pb-3">Mess Feedback Analysis</h4>
+        <div class="card">
+            <h3 class="card-title">User reviews</h3>
+            <div class="card-rating">
+                <div class="ratings">
+                    <div id="rating" class="Stars" style="--rating: {{ rating }};" aria-label="Rating is {{ rating }} out of 5.">   
+                    </div>
+                </div>
+                <div class="card-rating-text">{{rating}} out of 5</div>
+            </div>
+                <p class="rating-count">{{count}} user ratings</p>
+                <div class="rating-percents">
+                    <div class="rating-percent">
+                        <span class="rating-no">5 star</span>
+                        <div class="rating-progress"></div>
+                        <span class="rating-percent-no">{{ percent_5 }}%</span>
+                    </div>
+                    <div class="rating-percent">
+                        <span class="rating-no">4 star</span>
+                        <div class="rating-progress"></div>
+                        <span class="rating-percent-no">{{ percent_4 }}%</span>
+                    </div>
+                    <div class="rating-percent">
+                        <span class="rating-no">3 star</span>
+                        <div class="rating-progress"></div>
+                        <span class="rating-percent-no">{{ percent_3 }}%</span>
+                    </div>
+                    <div class="rating-percent">
+                        <span class="rating-no">2 star</span>
+                        <div class="rating-progress"></div>
+                        <span class="rating-percent-no">{{ percent_2 }}%</span>
+                    </div>
+                    <div class="rating-percent">
+                        <span class="rating-no">1 star</span>
+                        <div class="rating-progress"></div>
+                        <span class="rating-percent-no">{{ percent_1 }}%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+<style>
+    .rating-percent:nth-child(1) .rating-progress::before{
+        width: {{percent_5}}%;
+    }
+    .rating-percent:nth-child(2) .rating-progress::before{
+        width: {{percent_4}}%;
+    }
+    .rating-percent:nth-child(3) .rating-progress::before{
+        width: {{percent_3}}%;
+    }
+    .rating-percent:nth-child(4) .rating-progress::before{
+        width: {{percent_2}}%;
+    }
+    .rating-percent:nth-child(5) .rating-progress::before{
+        width: {{percent_1}}%;
+    }
+</style>
+{% endblock content %}
+{% block script_links %}
+
+<script>
+    var type = '{{type}}';
+    if (type != ""){
+        for (let i=0; i<document.getElementById('id_type').options.length; i++){
+            if (document.getElementById('id_type').options[i].value == type){
+                document.getElementById('id_type').options[i].selected = true;
+                break;
+            }
+        }
+    }
+    var day = '{{day}}'
+    if (day != ""){
+        for (let i=0; i<document.getElementById('id_day').options.length; i++){
+            if (document.getElementById('id_day').options[i].value == day){
+                document.getElementById('id_day').options[i].selected = true;
+                break;
+            }
+        }
+    }
+    var year = new Date().getFullYear();
+    document.getElementById("by_year").max = year;
+    function updateCalendars(){
+    //   if (this.id === 'by_date'){
+    //     document.getElementById('by_month').value = '';
+    //     document.getElementById('by_year').value = '';
+    //   }
+    //   else if (this.id === 'by_month'){
+    //     document.getElementById('by_date').value = '';
+    //     document.getElementById('by_year').value = '';
+    //   }
+      if (this.id === 'by_year'){
+        document.getElementById('by_from_date').value = '';
+        document.getElementById('by_to_date').value = '';
+        document.getElementById('by_from_date').required = false;
+        document.getElementById('by_to_date').required = false;
+      }
+      else if (this.id == 'by_from_date'){
+        if (this.value != ''){
+            document.getElementById('by_year').value = '';
+            document.getElementById('by_to_date').required = true;
+        }
+        else{
+            document.getElementById('by_from_date').required = false;
+            document.getElementById('by_to_date').required = false;
+            document.getElementById('by_to_date').value = '';
+        }
+      } 
+      else if (this.id == 'by_to_date'){
+        if (this.value != ''){
+            document.getElementById('by_from_date').required = true;
+        }
+        else{
+            document.getElementById('by_year').value = '';
+            document.getElementById('by_to_date').required = false;
+            document.getElementById('by_from_date').required = false;
+            document.getElementById('by_from_date').value = '';
+        }
+      } 
+    }
+    document.getElementById('by_from_date').addEventListener('change', updateCalendars);
+    document.getElementById('by_to_date').addEventListener('change', updateCalendars);
+    document.getElementById('by_year').addEventListener('click', updateCalendars);
+    // if (document.getElementById('id_type').value == ""){
+    //     document.getElementById('view-btn').style.pointerEvents = 'None';
+    // }
+    // document.getElementById('id_type').addEventListener('change', function(){
+    //     console.log(document.getElementById('view-btn').style.pointerEvents)
+    //     console.log(document.getElementById('view-btn').style.display)
+    //     if (this.value == ""){
+    //         document.getElementById('view-btn').style.pointerEvents = 'None';
+    //     }
+    //     else{
+    //         document.getElementById('view-btn').style.pointerEvents = '';
+    //     }
+    // });
+</script>
+{% endblock script_links %}
