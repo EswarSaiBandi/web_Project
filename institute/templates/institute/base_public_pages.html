@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-  <title>{% block title %}{% endblock %} - KP Fincare </title>
+  <title>{% block title %}{% endblock %} - FMS </title>
   {% load static %}
   <link rel="icon" href="{% static 'institute/favicon.ico' %}">
   <meta charset="utf-8">
@@ -22,12 +22,12 @@
     
 </head>
 <body>
-  <!-- <nav class="navbar fixed-top row px-4" id="topnav">
+  <nav class="navbar fixed-top row px-4" id="topnav">
     <div class="col-12 d-flex justify-content-center">
       <a href="{% url 'institute:index' %}" class="d-none d-md-block nav-title"><img src="{% static 'officials/logo_small.png' %}" alt="Institute Logo" class="mr-3">NIT Andhra Pradesh - Food Management System</a>
-      <a href="{% url 'institute:index' %}" class="d-block d-md-none nav-title"><img src="{% static 'officials/logo_small.png' %}" alt="Institute Logo" class="mr-2">NIT AP - Hostels</a>
+      <!-- <a href="{% url 'institute:index' %}" class="d-block d-md-none nav-title"><img src="{% static 'officials/logo_small.png' %}" alt="Institute Logo" class="mr-2">NIT AP - Hostels</a> -->
     </div>
-  </nav> -->
+  </nav>
 
   {% block content %}
   {% endblock content %}

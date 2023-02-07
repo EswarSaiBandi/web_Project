@@ -2,9 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.forms import AuthenticationForm
 from .models import User
-from institute.models import Student, Official,Customer,Admin
-from workers.models import Worker
-from security.models import Security
+from institute.models import Customer,Admin 
 from django.utils.safestring import mark_safe
 from django.urls import reverse_lazy
 
@@ -58,8 +56,7 @@ class SignUpForm(UserCreationForm):
         if email and (is_worker or is_official or is_security) and (not email.endswith('@nitandhra.ac.in')):
             raise forms.ValidationError('Staff should use institute eMail ID')
 
-        if not ((is_student and Student.objects.filter(account_email = email).exists()) or (is_customer and Customer.objects.filter(account_email = email).exists()) or (is_admin and Admin.objects.filter(account_email = email).exists()) or (is_official and Official.objects.filter(account_email = email).exists()) or\
-             (is_worker and Worker.objects.filter(account_email = email).exists()) or (is_security and Security.objects.filter(account_email=email).exists())):
+        if not ( (is_customer and Customer.objects.filter(account_email = email).exists()) or (is_admin and Admin.objects.filter(account_email = email).exists()) ):
             if is_student:
                 user_type = 'Student'
             elif is_official or is_worker:

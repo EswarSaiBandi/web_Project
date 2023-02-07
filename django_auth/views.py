@@ -8,9 +8,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse, reverse_lazy
 from .models import User
 from .forms import SignUpForm, LoginForm, ActivationEmailForm
-from institute.models import Student, Official,Admin,Customer
-from workers.models import Worker
-from security.models import Security
+from institute.models import Admin,Customer 
 from django.contrib.auth import login, get_user_model
 from django.utils.encoding import force_str
 from django.utils.http import urlsafe_base64_decode
@@ -57,15 +55,7 @@ class SignUpView(CreateView):
         is_customer = form.cleaned_data.get('is_customer')
         email = form.cleaned_data.get('email')
 
-        if is_student:
-            Student.objects.filter(account_email = email).update(user = user)
-        elif is_official:
-            Official.objects.filter(account_email = email).update(user = user)
-        elif is_worker:
-            Worker.objects.filter(account_email = email).update(user = user)
-        elif is_security:
-            Security.objects.filter(account_email = email).update(user = user)
-        elif is_admin:
+        if is_admin:
             Admin.objects.filter(account_email = email).update(user = user)
         elif is_customer:
             Customer.objects.filter(account_email = email).update(user = user)

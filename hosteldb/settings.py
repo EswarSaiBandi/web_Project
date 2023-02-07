@@ -46,12 +46,12 @@ INSTALLED_APPS = [
     'institute',
     'officials',
     'students',
-    'complaints',
-    'workers',
-    'security',
+    # 'complaints',
+    # 'workers',
+    # 'security',
     'django_auth',
-    'qr_code',
-    'mess_feedback'
+    # 'qr_code',
+    # 'mess_feedback'
 ]
 
 MIDDLEWARE = [
