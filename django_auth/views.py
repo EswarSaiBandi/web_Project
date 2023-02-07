@@ -8,7 +8,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse, reverse_lazy
 from .models import User
 from .forms import SignUpForm, LoginForm, ActivationEmailForm
-from institute.models import Student, Official
+from institute.models import Student, Official,Admin,Customer
 from workers.models import Worker
 from security.models import Security
 from django.contrib.auth import login, get_user_model
@@ -53,6 +53,8 @@ class SignUpView(CreateView):
         is_official = form.cleaned_data.get('is_official')
         is_worker = form.cleaned_data.get('is_worker')
         is_security = form.cleaned_data.get('is_security')
+        is_admin = form.cleaned_data.get('is_admin')
+        is_customer = form.cleaned_data.get('is_customer')
         email = form.cleaned_data.get('email')
 
         if is_student:
@@ -63,6 +65,10 @@ class SignUpView(CreateView):
             Worker.objects.filter(account_email = email).update(user = user)
         elif is_security:
             Security.objects.filter(account_email = email).update(user = user)
+        elif is_admin:
+            Admin.objects.filter(account_email = email).update(user = user)
+        elif is_customer:
+            Customer.objects.filter(account_email = email).update(user = user)
         return response
     
     def get_context_data(self, **kwargs):

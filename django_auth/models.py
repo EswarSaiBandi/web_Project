@@ -26,6 +26,10 @@ class UserManager(BaseUserManager):
             user.is_worker = True
         elif type_flag == 'security':
             user.is_security = True
+        elif type_flag == 'customer':
+            user.is_customer = True
+        elif type_flag == 'admin':
+            user.is_admin = True
         else:
             raise ValueError('User type should be one of the following:\n student, official, worker')
 
@@ -55,6 +59,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_official = models.BooleanField(default=False)
     is_worker = models.BooleanField(default=False)
     is_security = models.BooleanField(default=False)
+    is_customer = models.BooleanField(default=False)
+    is_admin = models.BooleanField(default=False)
+
 
     email_confirmed = models.BooleanField(default=True)
 
@@ -72,6 +79,8 @@ class User(AbstractBaseUser, PermissionsMixin):
         return (self.is_student and self.student) or \
             (self.is_official and self.official) or \
             (self.is_worker and self.worker) or \
+            (self.is_customer and self.customer) or \
+            (self.is_admin and self.admin) or \
             (self.is_security and self.security)
     
     def entity_id(self):
@@ -84,6 +93,8 @@ class User(AbstractBaseUser, PermissionsMixin):
         return (self.is_student and 'Student') or \
             (self.is_official and 'Official') or \
             (self.is_worker and 'Worker') or \
+            (self.is_admin and 'Admin') or \
+            (self.is_customer and 'Customer') or \
             (self.is_security and 'Security')
 
     def home_url(self):
@@ -95,10 +106,14 @@ class User(AbstractBaseUser, PermissionsMixin):
             return reverse('workers:home')
         elif self.is_security:
             return reverse('security:home')
+        elif self.is_admin:
+            return reverse('students:home')
+        elif self.is_customer:
+            return reverse('students:home')
 
     def send_activation_email(self, request, from_email=None, **kwargs):
         current_site = get_current_site(request)
-        subject = 'Activate your Hostel Management System Account.'
+        subject = 'Activate your Food Management System Account.'
         email_context = {
             'user': self,
             'protocol': request.scheme,

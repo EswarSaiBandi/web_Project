@@ -20,7 +20,7 @@ class AddUserForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('email', 'is_student', 'is_official', 'is_worker', 'is_staff', 'is_superuser')
+        fields = ('email', 'is_student', 'is_official', 'is_worker', 'is_staff', 'is_superuser','is_customer','is_admin')
 
     def clean_password2(self):
         # Check that the two password entries match
@@ -47,7 +47,7 @@ class UpdateUserForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('email', 'password', 'is_active', 'is_staff', 'is_student', 'is_official', 'is_worker')
+        fields = ('email', 'password', 'is_active', 'is_staff', 'is_student', 'is_official', 'is_worker','is_customer','is_admin')
 
     def clean_password(self):
         # Password can't be changed in the admin
@@ -58,11 +58,11 @@ class UserAdmin(BaseUserAdmin):
     form = UpdateUserForm
     add_form = AddUserForm
 
-    list_display = ('email', 'is_student', 'is_official', 'is_worker', 'is_security')
-    list_filter = ('is_student', 'is_official', 'is_worker', 'is_security')
+    list_display = ('email', 'is_student', 'is_official', 'is_worker', 'is_security','is_customer','is_admin')
+    list_filter = ('is_student', 'is_official', 'is_worker', 'is_security','is_customer','is_admin')
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
-        ('Permissions', {'fields': ('is_active', 'is_student', 'is_official', 'is_worker', 'is_security', 'email_confirmed',)}),
+        ('Permissions', {'fields': ('is_active', 'is_student', 'is_official', 'is_worker', 'is_security','is_customer','is_admin', 'email_confirmed',)}),
     )
     add_fieldsets = (
         (

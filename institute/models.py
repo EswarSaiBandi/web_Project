@@ -128,6 +128,213 @@ class Student(models.Model):
         return Announcements.objects.filter(created_by__in=[warden, chief, deputy]).exclude(officials_only = True)
 
 
+
+
+
+
+
+
+# Create your models here.
+class Admin(models.Model):
+
+
+    GENDER=(
+        ('Male','Male'),
+        ('Female','Female'),
+    )
+
+     
+
+    def photo_storage_path(instance, filename):
+        extension = filename.split('.')[-1]
+        return 'Student-Photos/Year-{}/{}.{}'.format(instance.year, instance.regd_no, extension)
+
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True)
+    account_email = models.EmailField(unique=True, null=True, blank=True)
+    # regd_no = models.CharField(unique=True, null=False, max_length=8, validators=[MinLengthValidator(6)])
+    # roll_no = models.CharField(unique=True, null=True, blank=True, max_length=8, validators=[MinLengthValidator(6)])
+    name = models.CharField(max_length=100, null=False)
+    email = models.EmailField(null=True, blank=True)
+    # year = models.IntegerField(null=False, choices=YEAR)
+    # branch = models.CharField(max_length=40,null=True, blank=True)
+    gender = models.CharField(max_length=7,choices=GENDER,null=False)
+    # pwd = models.BooleanField(null=False, default=False, blank=True)
+    # community = models.CharField(max_length=25, null=True, blank=True)
+    aadhar_number = models.CharField(max_length=12, null=True, blank=True, validators=[MinLengthValidator(4)], default='0000')
+    dob = models.DateField(null=True, default="2000-01-01",validators=[date_no_future], blank=True)
+    # blood_group = models.CharField(max_length=25, null=True, blank=True)
+    # father_name = models.CharField(max_length=100, null=True, blank=True)
+    # mother_name = models.CharField(max_length=100, null=True, blank=True)
+    phone = models.CharField(null=False, max_length=10, validators=[numeric_only])
+    # parents_phone = models.CharField(null=True, max_length=10, validators=[numeric_only], blank=True)
+    # emergency_phone = models.CharField(null=True, blank=True, max_length=10, validators=[numeric_only])
+    address = models.TextField(null=True, blank=True)
+    photo = models.ImageField(null=True, blank=True, upload_to=photo_storage_path)
+    # is_hosteller = models.BooleanField(null=False, default=True)
+    # outing_rating = models.DecimalField(null=False,blank=True, default=5.0, max_digits=3, decimal_places=2)
+    # discipline_rating = models.DecimalField(null=False, blank=True, default=5.0, max_digits=3, decimal_places=2)
+    # specialization = models.CharField(max_length=15, choices=PROGRAMME_OPTIONS, null=False)
+
+    def __str__(self):
+        return str(self.regd_no)
+
+    def clean(self):
+        super().clean()
+        if not self.is_hosteller and hasattr(self, 'roomdetail'):
+            raise ValidationError("Day scholars cannot be alloted a room.")
+
+    def block(self):
+        return self.roomdetail.block
+
+    def calculate_rating(self, outingInOutObj):
+        outingInOutObjs = OutingInOutTimes.objects.filter(outing__student=self).filter(inTime__isnull=False)
+        invalid = round((5-self.outing_rating)*len(outingInOutObjs))
+        if outingInOutObj.outing.type == 'Local':
+            if outingInOutObj.outing.student.gender == 'Male' and outingInOutObj.inTime != None:
+                if (outingInOutObj.inTime.date()!=outingInOutObj.outing.toDate.date()) or ((outingInOutObj.inTime - outingInOutObj.outing.toDate).total_seconds()/3600) > 6 :
+                    invalid+=1.5
+                elif ((outingInOutObj.inTime - outingInOutObj.outing.toDate).total_seconds()/60) > 60.0:
+                    invalid+=1
+                elif ((outingInOutObj.inTime - outingInOutObj.outing.toDate).total_seconds()/60) > 15.0:
+                    invalid+=0.5
+            elif outingInOutObj.outing.student.gender == 'Female' and outingInOutObj.inTime != None:
+                if (outingInOutObj.inTime.date()!=outingInOutObj.outing.toDate.date()) or (outingInOutObj.inTime.hour*100 + outingInOutObj.inTime.minute) > 2145 :
+                    invalid+=1.5
+                elif ((outingInOutObj.inTime - outingInOutObj.outing.toDate).total_seconds()/60) > 60.0:
+                    invalid+=1
+                elif ((outingInOutObj.inTime - outingInOutObj.outing.toDate).total_seconds()/60) > 15.0:
+                    invalid+=0.5 
+        else:
+            if outingInOutObj.inTime != None and ((outingInOutObj.inTime - outingInOutObj.outing.toDate).total_seconds()/3600) > 24:
+                invalid+=2
+            elif outingInOutObj.inTime != None and ((outingInOutObj.inTime - outingInOutObj.outing.toDate).total_seconds()/3600) > 12:
+                invalid+=1.5
+            elif outingInOutObj.inTime != None and ((outingInOutObj.inTime - outingInOutObj.outing.toDate).total_seconds()/3600) > 6:
+                invalid+=1
+            elif outingInOutObj.inTime != None and ((outingInOutObj.inTime - outingInOutObj.outing.toDate).total_seconds()/3600) > 1.5:
+                invalid+=0.5
+        if len(outingInOutObjs)!=0:
+            rating = 5-(invalid/(len(outingInOutObjs)+1))
+        elif (len(outingInOutObjs)-invalid) < 0:
+            rating = 0
+        else:
+            rating = 5
+        return rating
+
+    def update_disciplinary_rating(self, points):
+        if (float(self.discipline_rating) - (points/5)) > 0:
+            self.discipline_rating = float(self.discipline_rating) - (points/5)
+        else:
+            self.discipline_rating = 0
+
+    def related_announcements(self):
+        warden = (self.block().warden() and self.block().warden().user.id) or None
+        chief = (self.block().chief_warden() and self.block().chief_warden()[0].user.id) or None
+        deputy = (self.block().deputy_chief_warden() and self.block().deputy_chief_warden()[0].user.id) or None
+        return Announcements.objects.filter(created_by__in=[warden, chief, deputy]).exclude(officials_only = True)
+
+
+
+
+# Create your models here.
+class Customer(models.Model):
+
+
+    GENDER=(
+        ('Male','Male'),
+        ('Female','Female'),
+    )
+
+     
+
+    def photo_storage_path(instance, filename):
+        extension = filename.split('.')[-1]
+        return 'Student-Photos/Year-{}/{}.{}'.format(instance.year, instance.regd_no, extension)
+
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True)
+    account_email = models.EmailField(unique=True, null=True, blank=True)
+    # regd_no = models.CharField(unique=True, null=False, max_length=8, validators=[MinLengthValidator(6)])
+    # roll_no = models.CharField(unique=True, null=True, blank=True, max_length=8, validators=[MinLengthValidator(6)])
+    name = models.CharField(max_length=100, null=False)
+    email = models.EmailField(null=True, blank=True)
+    # year = models.IntegerField(null=False, choices=YEAR)
+    # branch = models.CharField(max_length=40,null=True, blank=True)
+    gender = models.CharField(max_length=7,choices=GENDER,null=False)
+    # pwd = models.BooleanField(null=False, default=False, blank=True)
+    # community = models.CharField(max_length=25, null=True, blank=True)
+    aadhar_number = models.CharField(max_length=12, null=True, blank=True, validators=[MinLengthValidator(4)], default='0000')
+    dob = models.DateField(null=True, default="2000-01-01",validators=[date_no_future], blank=True)
+    # blood_group = models.CharField(max_length=25, null=True, blank=True)
+    # father_name = models.CharField(max_length=100, null=True, blank=True)
+    # mother_name = models.CharField(max_length=100, null=True, blank=True)
+    phone = models.CharField(null=False, max_length=10, validators=[numeric_only])
+    # parents_phone = models.CharField(null=True, max_length=10, validators=[numeric_only], blank=True)
+    # emergency_phone = models.CharField(null=True, blank=True, max_length=10, validators=[numeric_only])
+    address = models.TextField(null=True, blank=True)
+    photo = models.ImageField(null=True, blank=True, upload_to=photo_storage_path)
+    # is_hosteller = models.BooleanField(null=False, default=True)
+    # outing_rating = models.DecimalField(null=False,blank=True, default=5.0, max_digits=3, decimal_places=2)
+    # discipline_rating = models.DecimalField(null=False, blank=True, default=5.0, max_digits=3, decimal_places=2)
+    # specialization = models.CharField(max_length=15, choices=PROGRAMME_OPTIONS, null=False)
+
+    def __str__(self):
+        return str(self.regd_no)
+
+    def clean(self):
+        super().clean()
+        if not self.is_hosteller and hasattr(self, 'roomdetail'):
+            raise ValidationError("Day scholars cannot be alloted a room.")
+
+    def block(self):
+        return self.roomdetail.block
+
+    def calculate_rating(self, outingInOutObj):
+        outingInOutObjs = OutingInOutTimes.objects.filter(outing__student=self).filter(inTime__isnull=False)
+        invalid = round((5-self.outing_rating)*len(outingInOutObjs))
+        if outingInOutObj.outing.type == 'Local':
+            if outingInOutObj.outing.student.gender == 'Male' and outingInOutObj.inTime != None:
+                if (outingInOutObj.inTime.date()!=outingInOutObj.outing.toDate.date()) or ((outingInOutObj.inTime - outingInOutObj.outing.toDate).total_seconds()/3600) > 6 :
+                    invalid+=1.5
+                elif ((outingInOutObj.inTime - outingInOutObj.outing.toDate).total_seconds()/60) > 60.0:
+                    invalid+=1
+                elif ((outingInOutObj.inTime - outingInOutObj.outing.toDate).total_seconds()/60) > 15.0:
+                    invalid+=0.5
+            elif outingInOutObj.outing.student.gender == 'Female' and outingInOutObj.inTime != None:
+                if (outingInOutObj.inTime.date()!=outingInOutObj.outing.toDate.date()) or (outingInOutObj.inTime.hour*100 + outingInOutObj.inTime.minute) > 2145 :
+                    invalid+=1.5
+                elif ((outingInOutObj.inTime - outingInOutObj.outing.toDate).total_seconds()/60) > 60.0:
+                    invalid+=1
+                elif ((outingInOutObj.inTime - outingInOutObj.outing.toDate).total_seconds()/60) > 15.0:
+                    invalid+=0.5 
+        else:
+            if outingInOutObj.inTime != None and ((outingInOutObj.inTime - outingInOutObj.outing.toDate).total_seconds()/3600) > 24:
+                invalid+=2
+            elif outingInOutObj.inTime != None and ((outingInOutObj.inTime - outingInOutObj.outing.toDate).total_seconds()/3600) > 12:
+                invalid+=1.5
+            elif outingInOutObj.inTime != None and ((outingInOutObj.inTime - outingInOutObj.outing.toDate).total_seconds()/3600) > 6:
+                invalid+=1
+            elif outingInOutObj.inTime != None and ((outingInOutObj.inTime - outingInOutObj.outing.toDate).total_seconds()/3600) > 1.5:
+                invalid+=0.5
+        if len(outingInOutObjs)!=0:
+            rating = 5-(invalid/(len(outingInOutObjs)+1))
+        elif (len(outingInOutObjs)-invalid) < 0:
+            rating = 0
+        else:
+            rating = 5
+        return rating
+
+    def update_disciplinary_rating(self, points):
+        if (float(self.discipline_rating) - (points/5)) > 0:
+            self.discipline_rating = float(self.discipline_rating) - (points/5)
+        else:
+            self.discipline_rating = 0
+
+    def related_announcements(self):
+        warden = (self.block().warden() and self.block().warden().user.id) or None
+        chief = (self.block().chief_warden() and self.block().chief_warden()[0].user.id) or None
+        deputy = (self.block().deputy_chief_warden() and self.block().deputy_chief_warden()[0].user.id) or None
+        return Announcements.objects.filter(created_by__in=[warden, chief, deputy]).exclude(officials_only = True)
+
 class Official(models.Model):
     EMP=(
         ('Caretaker','Caretaker'),

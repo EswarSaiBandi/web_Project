@@ -11,7 +11,7 @@ from django.utils import timezone
 def official_check(user):
     return user.is_authenticated and user.is_official
 def student_check(user):
-    return user.is_authenticated and user.is_student 
+    return user.is_authenticated and (user.is_student or user.is_customer or user.is_admin)
 
 def mess_incharge_check(user):
     if user.is_worker:

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Hostel Management System</title>
+  <title>Food Management System</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
@@ -27,7 +27,7 @@
       <a href="{% if request.user.is_authenticated %}{{ request.user.home_url }}{% else %}{% url 'institute:index' %}{% endif %}">
         <span class="fa fa-home nav-icon"></span>
       </a>
-      <span class="d-none d-md-block nav-title"><img src="{% static 'officials/logo_small.png' %}" alt="Institute Logo" class="mr-3">NIT Andhra Pradesh - Hostel Management System</span>
+      <span class="d-none d-md-block nav-title"><img src="{% static 'officials/logo_small.png' %}" alt="Institute Logo" class="mr-3">NIT Andhra Pradesh - Food Management System</span>
       <span class="d-block d-md-none nav-title"><img src="{% static 'officials/logo_small.png' %}" alt="Institute Logo" class="mr-2">NIT AP - Hostels</span>
       <span></span>
     </div>

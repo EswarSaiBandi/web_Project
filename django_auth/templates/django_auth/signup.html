@@ -15,6 +15,8 @@
                <div class="col-12 col-md-3">{{form.is_official|as_crispy_field}} </div>
                <div class="col-12 col-md-3">{{form.is_worker|as_crispy_field}} </div>
                <div class="col-12 col-md-3">{{form.is_security|as_crispy_field}} </div>
+               <div class="col-12 col-md-3">{{form.is_admin|as_crispy_field}} </div>
+               <div class="col-12 col-md-3">{{form.is_customer|as_crispy_field}} </div>
           </div>
           <div class="row justify-content-center">
                <button type="submit" class="btn btn-warning px-4 py-2">Sign Up</button>
@@ -38,27 +40,52 @@
      var o = document.getElementById('id_is_official');
      var w = document.getElementById('id_is_worker');
      var sec = document.getElementById('id_is_security');
+     var cus = document.getElementById('id_is_customer');
+     var adm = document.getElementById('id_is_admin');
 
 
      s.onclick =  () => {
           o.checked = false;
           w.checked = false;
           sec.checked = false;
+          cus.checked = false;
+          adm.checked = false;
+
      }
      w.onclick = () => {
           s.checked = false;
           sec.checked = false;
           o.checked = false;
+          cus.checked = false;
+          adm.checked = false;
      }
      o.onclick = () => {
           s.checked = false;
           sec.checked = false;
           w.checked = false;
+          cus.checked = false;
+          adm.checked = false;
      }
      sec.onclick = () => {
           s.checked = false;
           o.checked = false;
           w.checked = false;
+          cus.checked = false;
+          adm.checked = false;
+     }
+     cus.onclick = () => {
+          s.checked = false;
+          o.checked = false;
+          w.checked = false;
+          sec.checked = false;
+          adm.checked = false;
+     }
+     adm.onclick = () => {
+          s.checked = false;
+          o.checked = false;
+          w.checked = false;
+          sec.checked = false;
+          cus.checked = false;
      }
 
 </script>

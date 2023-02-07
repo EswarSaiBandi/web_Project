@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-  <title>{% block title %}{% endblock %} - Hostel Management System</title>
+  <title>{% block title %}{% endblock %} - Food Management System</title>
   {% load static %}
   <link rel="icon" href="{% static 'institute/favicon.ico' %}">
   <meta charset="utf-8">
@@ -28,7 +28,7 @@
       <a href="{% if request.user.is_authenticated %}{{ request.user.home_url }}{% else %}{% url 'institute:index' %}{% endif %}">
         <span class="fa fa-home nav-icon"></span>
       </a>
-      <span class="d-none d-md-block nav-title"><img src="{% static 'officials/logo_small.png' %}" alt="Institute Logo" class="mr-3">NIT Andhra Pradesh - Hostel Management System</span>
+      <span class="d-none d-md-block nav-title"><img src="{% static 'officials/logo_small.png' %}" alt="Institute Logo" class="mr-3">NIT Andhra Pradesh - Food Management System</span>
       <span class="d-block d-md-none nav-title"><img src="{% static 'officials/logo_small.png' %}" alt="Institute Logo" class="mr-2">NIT AP - Hostels</span>
       <span></span>
     </div>

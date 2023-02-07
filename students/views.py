@@ -30,7 +30,7 @@ class RoomAllotmentTestMixin(UserPassesTestMixin):
         return False
 
 def student_check(user):
-    return user.is_authenticated and user.is_student
+    return user.is_authenticated and (user.is_student or user.is_customer or user.is_admin)
 
 def room_allotment_check(user):
     return user.is_authenticated and user.is_student and user.student.roomdetail and user.student.roomdetail.room()!='-'
@@ -40,25 +40,23 @@ def room_allotment_check(user):
 @user_passes_test(student_check)
 def home(request):
     user = request.user
-    student = user.student
-    present_dates_count = 0
-    absent_dates_count = 0
-    if user.student.roomdetail and user.student.roomdetail.room()=='-':
-        raise Http404('You are not allocated any room yet')
-    if Attendance.objects.filter(student=student).exists():
-        present_dates_count = (student.attendance and student.attendance.present_dates and len(student.attendance.present_dates.split(','))) or 0
-        absent_dates_count = (student.attendance and student.attendance.absent_dates and len(student.attendance.absent_dates.split(','))) or 0
-    outing_count = 0
-    for outing in student.outing_set.all():
-        if outing.is_upcoming():
-            outing_count+=1
-    outing_rating = student.outing_rating
-    discipline_rating = student.discipline_rating
-    complaints = Complaint.objects.filter(user = user)
-    announce_obj = student.related_announcements()[:5]
-    return render(request, 'students/home.html', {'student': student, 'present_dates_count':present_dates_count, \
-        'absent_dates_count':absent_dates_count, 'outing_count': outing_count, 'complaints':complaints, 'outing_rating':outing_rating, \
-            'announce_obj':announce_obj, 'discipline_rating':discipline_rating})
+    # student = user.student
+    # present_dates_count = 0
+    # absent_dates_count = 0
+    # if user.student.roomdetail and user.student.roomdetail.room()=='-':
+    #     raise Http404('You are not allocated any room yet')
+    # if Attendance.objects.filter(student=student).exists():
+    #     present_dates_count = (student.attendance and student.attendance.present_dates and len(student.attendance.present_dates.split(','))) or 0
+    #     absent_dates_count = (student.attendance and student.attendance.absent_dates and len(student.attendance.absent_dates.split(','))) or 0
+    # outing_count = 0
+    # for outing in student.outing_set.all():
+    #     if outing.is_upcoming():
+    #         outing_count+=1
+    # outing_rating = student.outing_rating
+    # discipline_rating = student.discipline_rating
+    # complaints = Complaint.objects.filter(user = user)
+    # announce_obj = student.related_announcements()[:5]
+    return render(request, 'students/home.html' )
 
 
 class OutingListView(StudentTestMixin, ListView):
