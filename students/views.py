@@ -37,28 +37,9 @@ def room_allotment_check(user):
 
 @user_passes_test(customer_check)
 def home(request):
-    user = request.user
-    # customer = user.student
+    user = request.user 
     print(user)
-    print("hi")
-    # print(user.__dict__)
-    # user=user.customer
-    # print(user.customer.gender)
-    # present_dates_count = 0
-    # absent_dates_count = 0
-    # if user.student.roomdetail and user.student.roomdetail.room()=='-':
-    #     raise Http404('You are not allocated any room yet')
-    # if Attendance.objects.filter(student=student).exists():
-    #     present_dates_count = (student.attendance and student.attendance.present_dates and len(student.attendance.present_dates.split(','))) or 0
-    #     absent_dates_count = (student.attendance and student.attendance.absent_dates and len(student.attendance.absent_dates.split(','))) or 0
-    # outing_count = 0
-    # for outing in student.outing_set.all():
-    #     if outing.is_upcoming():
-    #         outing_count+=1
-    # outing_rating = student.outing_rating
-    # discipline_rating = student.discipline_rating
-    # complaints = Complaint.objects.filter(user = user)
-    # announce_obj = student.related_announcements()[:5]
+    print("hi") 
     return render(request, 'students/home.html' )
 
 
@@ -135,52 +116,43 @@ def addItems(request):
         form = addItemsForm()
     return render(request, 'students/addItems.html', {'form':form})
 
-class itemsView(StudentTestMixin, ListView):
-    model = Customer
-    template_name = 'students/items_list.html'
-    context_object_name = 'items_list'
+ 
 
-    def get_queryset(self):
-        items_set = item.objects.filter() #.filter(student=self.request.user.student).annotate(outTime=F('outinginouttimes__outTime'), \
-            #inTime=F('outinginouttimes__inTime'))
-
-        print(items_set.all())
-        return items_set
+ 
+def itemsView(request):
+    user = request.user
+    items=item.objects.all()   
+    form = itemsViewForm()
+    return render(request, 'students/items_list.html', {'form':form,'items': items})
 
 
+@user_passes_test(customer_check)
+def HumaddItems(request):
+    if request.method == 'POST':
+        form = HumaddItemsForm(request.POST)
+        if(form.is_valid()):
+            item_id = form.cleaned_data['item_id']
+            # price = form.cleaned_data['price']
+            quantity_available = form.cleaned_data['quantity_available']
+            # regulation = int(form.cleaned_data['regulation'])
+            # if(( (form.cleaned_data['price']>=0) and (form.cleaned_data['quantity_available']>0))):
+            r = Humitem(item_id=item_id, quantity_available=quantity_available)
+            r.save()
+            msg = 'Item Added Successfully.'
+            return render(request, 'students/addItems.html', {'form':form, 'msg':msg})
+    else:
+        form = HumaddItemsForm()
+    return render(request, 'students/addItems.html', {'form':form})
 
-class HumaddItems(StudentTestMixin, SuccessMessageMixin, CreateView):
-    model = Humitem
-    form_class = HumaddItemsForm
-    template_name = 'students/HumaddItems.html'
-    success_url = reverse_lazy('students:HumaddItems')
-    success_message = 'Item successfully Added!'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['form_title'] = 'Add Items'
-        return context
-    def get_form_kwargs(self):
-        kwargs = super(HumaddItems, self).get_form_kwargs()
-        kwargs['request'] = self.request
-        return kwargs
-    def form_valid(self, form):
-        # form.instance.student = self.request.user.student
-        return super().form_valid(form)
+  
 
 
+def HumitemsView(request):
+    user = request.user
+    items=Humitem.objects.all()   
+    form = HumitemsViewForm()
+    return render(request, 'students/Humitems_list.html', {'form':form,'items': items})
 
-class HumitemsView(StudentTestMixin, ListView):
-    model = Customer
-    template_name = 'students/Humitems_list.html'
-    context_object_name = 'items_list'
-
-    def get_queryset(self):
-        items_set = Humitem.objects.filter() #.filter(student=self.request.user.student).annotate(outTime=F('outinginouttimes__outTime'), \
-            #inTime=F('outinginouttimes__inTime'))
-
-        print(items_set.all())
-        return items_set
 def send_birthday_mail():
     # search the query set for birthday and send him email
     from datetime import datetime
