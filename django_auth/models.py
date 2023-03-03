@@ -87,6 +87,8 @@ class User(AbstractBaseUser, PermissionsMixin):
         return (self.is_student and self.student.regd_no) or \
             (self.is_official and self.official.emp_id) or \
             (self.is_worker and self.worker.staff_id) or \
+            (self.is_customer and self.customer.cus_id) or \
+            (self.is_admin and self.admin.adm_id) or \
             (self.is_security and self.security.security_id)
 
     def entity_type(self):

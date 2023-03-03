@@ -54,8 +54,8 @@
     <div class="card" id="present">
       <div class="row">
         <div class="col-8">
-          <span class="row atttext">Number of days present.</span>
-          <span class="row attnum">{{ present_dates_count }}</span>
+          <span class="row atttext">Number of Orders As of Now.</span>
+          <span class="row attnum">{{ total_number_of_orders }}</span>
         </div>
         <div class="col-4">
           <span class="atticon"><i class="fa fa-user-plus"></i></span>
@@ -67,8 +67,8 @@
     <div class="card" id="absent">
       <div class="row">
         <div class="col-8">
-          <span class="row atttext">Number of days absent.</span>
-          <span class="row attnum">{{ absent_dates_count }}</span>
+          <span class="row atttext">Number of Cancelled Orders.</span>
+          <span class="row attnum">{{ total_number_of_orders_cancelled }}</span>
         </div>
         <div class="col-4">
           <span class="atticon"><i class="fa fa-user-times"></i></span>
@@ -80,8 +80,8 @@
     <div class="card" id="comps">
       <div class="row">
         <div class="col-8">
-          <span class="row atttext">Number of upcoming outings.</span>
-          <span class="row attnum">{{ outing_count }}</span>
+          <span class="row atttext">Number of orders to be delivered.</span>
+          <span class="row attnum">{{ total_number_of_orders_to_be_delivered }}</span>
         </div>
         <div class="col-4">
           <span class="atticon"><i class="fa fa-font-awesome"></i></span>
@@ -111,44 +111,26 @@
       <tbody id="tbody">
         <tr>
           <th>Name</th>
-          <td>{{student.name}}</td>
+          <td>{{customer.name}}</td>
         </tr>
         <tr>
-          <th>Registration No.</th>
-          <td>{{student.regd_no}}</td>
+          <th>Customer Id.</th>
+          <td>{{customer.cus_no}}</td>
         </tr>
-        <tr>
-          <th>Roll No.</th>
-          <td>{{student.roll_no}}</td>
-        </tr>
-        <tr>
-          <th>Year</th>
-          <td>{{student.year}}</td>
-        </tr>
-        <tr>
-          <th>Branch</th>
-          <td>{{student.branch}}</td>
-        </tr>
-        <tr>
-          <th>Room</th>
-          <td>
-            {{ student.roomdetail.room }}</td>
-        </tr>
-        <tr>
-          <th>Block</th>
-          <td>{{student.roomdetail.block.name}}</td>
-        </tr>
+         
+         
+  
         <tr>
           <th>Contact Number</th>
-          <td>{{student.phone}}</td>
+          <td>{{customer.phone}}</td>
         </tr>
         <tr>
           <th>e-Mail ID</th>
-          <td>{{student.email}}</td>
+          <td>{{customer.email}}</td>
         </tr>
         <tr>
           <th>Address</th>
-          <td>{{student.address}}</td>
+          <td>{{customer.address}}</td>
         </tr>
       </tbody>
     </table>
@@ -156,7 +138,7 @@
       <a href="{% url 'django_auth:change_password' %}"><button class="btn btn-primary">Change Password</button></a>
     </div>
   </div>
-  <div class="col-md-7 border p-3 ml-md-4">
+  <!-- <div class="col-md-7 border p-3 ml-md-4">
     <h3 class="text-center border-bottom border-secondary pb-3">Complaints Registered</h3>
     <div class="overflow-auto p-3">
       <table class="table table-hover table-muted table-striped" id="complaints_table">
@@ -187,7 +169,7 @@
         </tbody>
       </table>
     </div>
-  </div>
+  </div> -->
 </div>
 
 {% endblock content %}

@@ -1,0 +1,45 @@
+{% extends 'officials/base_officials.html' %}
+
+{% block title %}Student Home{% endblock title %}
+
+{% block style_links %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'students/home.css' %}">
+{% endblock style_links %}
+
+{% block content %}
+  
+  <p>
+    add available items
+  </p>
+  <div class="col text-center text-md-left">
+    <a href="{% url 'students:addItems' %}"><button class="link-item">Add Items</button></a>
+  </div>
+  <div class="col text-center text-md-left">
+    <a href="{% url 'students:itemsView' %}"><button class="link-item">View Items</button></a>
+  </div>
+
+{% endblock content %}
+
+
+{% block script_links %}
+
+<script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>
+<script>
+  $(document).ready(function () {
+    $('#complaints_table').DataTable({
+      "pageLength": 6,
+      "lengthChange": false,
+      "filter": false
+    });
+
+
+  });
+$('.carousel').carousel('cycle')
+$(document).ready(function(){
+  document.getElementsByClassName('carousel-item')[0].classList.add('active')
+});
+</script>
+
+{% endblock script_links %}

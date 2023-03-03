@@ -1,6 +1,5 @@
 from institute.models import Block
 from students.models import Attendance
-from security.models import OutingInOutTimes
 from django.utils import timezone
 from openpyxl import Workbook
 from openpyxl import styles

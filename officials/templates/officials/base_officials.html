@@ -201,6 +201,10 @@
     <!-- <a href="{% url 'security:home' %}" class="{% if url_name == 'home' %}active{% endif %}"><span span class="mr-3"><i class="fa fa-tachometer"></i></span> Dashboard</a>
     <a href="{% url 'security:outing-log' %}" class="{% if url_name == 'outing-log' %}active{% endif %}"><span span class="mr-3"><i class="fa fa-calendar"></i></span> Outing Log</a> -->
     {% endif %}
+    <a href="{% url 'students:business' %}" <span span class="mr-3"><i class="fa fa-calendar"></i></span> Business</a> 
+    <a href="{% url 'students:humanity' %}" <span span class="mr-3"><i class="fa fa-calendar"></i></span> Humanity</a> 
+
+    
     <a href="{% url 'django_auth:logout' %}"><span class="mr-3"><i class="fa fa-sign-out"></i></span>Log Out</a>
   </div>
   {% endwith %}

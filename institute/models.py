@@ -29,7 +29,7 @@ class Admin(models.Model):
 
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True)
     account_email = models.EmailField(unique=True, null=True, blank=True)
-    # regd_no = models.CharField(unique=True, null=False, max_length=8, validators=[MinLengthValidator(6)])
+    adm_id = models.CharField(unique=True, null=False, max_length=8, validators=[MinLengthValidator(6)])
     # roll_no = models.CharField(unique=True, null=True, blank=True, max_length=8, validators=[MinLengthValidator(6)])
     name = models.CharField(max_length=100, null=False)
     email = models.EmailField(null=True, blank=True)
@@ -74,13 +74,13 @@ class Customer(models.Model):
 
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True)
     account_email = models.EmailField(unique=True, null=True, blank=True)
-    # regd_no = models.CharField(unique=True, null=False, max_length=8, validators=[MinLengthValidator(6)])
+    cus_id = models.CharField(unique=True, null=False, max_length=8, validators=[MinLengthValidator(6)])
     # roll_no = models.CharField(unique=True, null=True, blank=True, max_length=8, validators=[MinLengthValidator(6)])
     name = models.CharField(max_length=100, null=False)
     email = models.EmailField(null=True, blank=True)
     # year = models.IntegerField(null=False, choices=YEAR)
     # branch = models.CharField(max_length=40,null=True, blank=True)
-    gender = models.CharField(max_length=7,choices=GENDER,null=False)
+    gender = models.CharField(max_length=7,choices=GENDER,null=False) 
     # pwd = models.BooleanField(null=False, default=False, blank=True)
     # community = models.CharField(max_length=25, null=True, blank=True)
     aadhar_number = models.CharField(max_length=12, null=True, blank=True, validators=[MinLengthValidator(4)], default='0000')
@@ -100,4 +100,47 @@ class Customer(models.Model):
 
     
 
-      
+
+
+# Create your models here.
+class Order(models.Model):
+    orderStatusOptions=(
+        ('1','1'),
+        ('2','2'),
+        ('3','3'),
+
+    )
+    order_id = models.CharField(unique=True, null=False, max_length=100)
+    sender_id = models.CharField(unique=True, null=False, max_length=8, validators=[MinLengthValidator(6)])
+    reciever_id = models.CharField(unique=True, null=False, max_length=8, validators=[MinLengthValidator(6)])
+    orderStatus=models.IntegerField(null=False,choices=orderStatusOptions,default=0)
+    rating = models.DecimalField(null=True,blank=True,  max_digits=3, decimal_places=2)
+    review = models.TextField(null=True, blank=True)
+
+
+class item(models.Model):
+    def photo_storage_path(instance, filename):
+            extension = filename.split('.')[-1]
+            return 'Student-Photos/Year-{}/{}.{}'.format(instance.year, instance.regd_no, extension)
+
+    item_id = models.CharField(unique=True, null=False, max_length=8, validators=[MinLengthValidator(6)])
+    quantity_available = models.IntegerField(null=False,default=1)
+    price=models.DecimalField(null=False,blank=False,  max_digits=10, decimal_places=2)
+    # photo = models.ImageField(null=True, blank=True, upload_to=photo_storage_path)
+
+
+class Humitem(models.Model):
+    def photo_storage_path(instance, filename):
+            extension = filename.split('.')[-1]
+            return 'Student-Photos/Year-{}/{}.{}'.format(instance.year, instance.regd_no, extension)
+
+    item_id = models.CharField(unique=True, null=False, max_length=8, validators=[MinLengthValidator(6)])
+    quantity_available = models.IntegerField(null=False,default=1)
+    # price=models.DecimalField(null=False,blank=False,  max_digits=10, decimal_places=2)
+    photo = models.ImageField(null=True, blank=True, upload_to=photo_storage_path)
+
+
+
+
+    
+    
