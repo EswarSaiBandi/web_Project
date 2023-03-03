@@ -13,9 +13,9 @@ urlpatterns = [
     path('humanityBuyer/', views.humanityBuyer, name='humanityBuyer'),
     path('humanitySeller/', views.humanitySeller, name='humanitySeller'),
     path('addItems/',  views.addItems, name='addItems'),
-    path('itemsView/', views.itemsView.as_view(), name='itemsView'),
-    path('HumaddItems/', views.HumaddItems.as_view(), name='HumaddItems'),
-    path('HumitemsView/', views.HumitemsView.as_view(), name='HumitemsView'),
+    path('itemsView/', views.itemsView, name='itemsView'),
+    path('HumaddItems/', views.HumaddItems, name='HumaddItems'),
+    path('HumitemsView/', views.HumitemsView, name='HumitemsView'),
     
 
 

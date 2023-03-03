@@ -1,5 +1,5 @@
 {% extends 'officials/base_public_forms.html' %}
-{% block title %}Outing Application{% endblock title %}
+{% block title %}Add Hum Items{% endblock title %}
 
 
 {% block style_links %}
@@ -24,6 +24,12 @@
       <button type="submit" class="btn btn-warning px-4 py-2">Apply</button>
     </div>
   </div>
+  {% if msg %}
+    <br>
+    <div class="row">
+        <strong>{{msg}}</strong>
+    </div>
+  {% endif %}
 </form>
   
 {% endblock content %}

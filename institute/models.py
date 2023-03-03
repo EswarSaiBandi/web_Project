@@ -19,10 +19,7 @@ class Admin(models.Model):
     GENDER=(
         ('Male','Male'),
         ('Female','Female'),
-    )
-
-     
-
+    )  
     def photo_storage_path(instance, filename):
         extension = filename.split('.')[-1]
         return 'Student-Photos/Year-{}/{}.{}'.format(instance.year, instance.regd_no, extension)
@@ -137,7 +134,7 @@ class Humitem(models.Model):
     item_id = models.CharField(unique=True, null=False, max_length=8, validators=[MinLengthValidator(6)])
     quantity_available = models.IntegerField(null=False,default=1)
     # price=models.DecimalField(null=False,blank=False,  max_digits=10, decimal_places=2)
-    photo = models.ImageField(null=True, blank=True, upload_to=photo_storage_path)
+    # photo = models.ImageField(null=True, blank=True, upload_to=photo_storage_path)
 
 
 
