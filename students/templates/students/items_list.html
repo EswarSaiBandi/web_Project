@@ -1,28 +1,124 @@
-{% extends 'officials/base_public_forms.html' %}
+{% extends 'officials/base_officials.html' %}
 {% block title %}View Items{% endblock title %}
 
 
 {% block style_links %}
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 {% endblock style_links %}
-  
-
 {% block content %}
+
+
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
 
 {% load crispy_forms_tags %}
 <form method="post">
   {% csrf_token %}
+  
+
+  {{ form|crispy }}
+
+<!-- 
   <div class="card-body text-capitalize">
     <div class="row">
-      <div class="col-12">
-        {{ form|crispy }}
+<div class="col-12"> -->
+        
+        
+            
+            <!-- <div class="card-deck"> --> 
+      
+            <!-- <div class="row row-cols-3 row-cols-md-3 g-4">
+            
+                {% for field in items %}
+
+
+
+
+
+
+                  <div class="col">
+                    <div class="card h-100">
+                      <img src="https://mdbcdn.b-cdn.net/img/new/standard/city/041.webp" class="card-img-top"
+                        alt="Hollywood Sign on The Hill" />
+                      <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                        <p class="card-text">
+                          This is a longer card with supporting text below as a natural lead-in to
+                          additional content. This content is a little bit longer.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  
+            {% endfor %}
+          </div> -->
+
+                <div class="row row-cols-1 row-cols-md-3 g-4">
+                  
+
+                  {% for field in items %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                
+            <div class="col ">
+              <div class="card h-100 ">
+                <img src="https://mdbcdn.b-cdn.net/img/new/standard/city/041.webp" class="card-img-top"
+                  alt="Hollywood Sign on The Hill" />
+                <div class="card-body">
+                  <h5 class="card-title">{{ field.item_id }}</h5>
+                  <p class="card-text">
+                    <p><strong>Price:</strong>
+                       {{ field.price }}</p>
+                    
+                    <p><strong>Quantity available now!! </strong>{{ field.quantity_available }}</p>
+                    <div class="row-cols-md-3">
+                      <button style="background-color: rgb(111, 175, 206);" class="btn btn-outline-secondary add-btn">Add to Cart</button>
+                    
+                      <button style="background-color: rgb(111, 175, 206);" class="btn btn-outline-secondary add-btn">Buy now</button>
+                    </div>
+                    <p>This is a longer card with supporting text below as a natural lead-in to
+                      additional content. This content is a little bit longer.</p>
+                  </p>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+            </div>
+          <!-- </div>
+        </div>
+            
+
+         
       </div>
-    </div>
-  </div>
-
-
-
-
+</div> -->
 
 
   <div class="container">
@@ -36,7 +132,10 @@
                      
                 </tr>
             </thead>
+            <!-- <div class="row row-cols-1 row-cols-md-3 g-4"> -->
             {% for field in items %}
+            
+            
             <tr>
                 <td style="border: 1px solid black;">
                     {{ field.item_id }}
@@ -49,8 +148,41 @@
                 </td>
                 
             </tr>
+          
             {% endfor %}
+          </div>
         </table>
+    </div>
+
+
+
+
+    <div style="display: flex; flex-direction: row; flex-wrap: wrap">
+
+            {% for field in items %}
+      {#  Single Card Template:#}
+      <div class="card" style="width: 18rem; margin: 10px">
+        <img src="https://mdbcdn.b-cdn.net/img/new/standard/city/041.webp" class="card-img-top" >
+        <div class="card-body">
+          <div style="display: flex; flex-direction: row">
+            <h5 class="card-title">{{field.item_id.name }}</h5>
+            {#  Colored cirlce:#}
+            <!-- <div style="
+              background: {{ card.color }};
+              width: 20px;
+              height: 20px;
+              margin-left: 10px;
+              border-radius: 50%;
+            "></div> -->
+          </div>
+          <p class="card-text">                    {{ field.price }}
+          </p>
+          <a href="/command/{{ card.id }}/color" class="btn btn-primary">Change Color</a>
+          <a href="/command/{{ card.id }}/delete" class="btn btn-primary">Delete</a>
+        </div>
+      </div>
+      {% endfor %}
+    
     </div>
 </div>
 
