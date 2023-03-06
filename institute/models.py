@@ -103,17 +103,19 @@ class Customer(models.Model):
 # Create your models here.
 class Order(models.Model):
     orderStatusOptions=(
-        ('1','1'),
-        ('2','2'),
-        ('3','3'),
+        ('processing','processing'),
+        ('prepared','prepared'),
+        ('delivered','delivered'),
 
     )
-    order_id = models.CharField(unique=True, null=False, max_length=100)
-    sender_id = models.CharField(unique=True, null=False, max_length=8, validators=[MinLengthValidator(6)])
-    reciever_id = models.CharField(unique=True, null=False, max_length=8, validators=[MinLengthValidator(6)])
-    orderStatus=models.IntegerField(null=False,choices=orderStatusOptions,default=0)
+    customer_id=models.IntegerField(max_length=100)
+    seller_id=models.IntegerField(max_length=100)
+    price=models.DecimalField(max_digits=8, decimal_places=2)
     rating = models.DecimalField(null=True,blank=True,  max_digits=3, decimal_places=2)
-    review = models.TextField(null=True, blank=True)
+    review= models.CharField(null=True,blank=True,  max_length=255)
+    orderStatus=models.CharField(choices=orderStatusOptions,max_length=255)
+
+ 
 
 
 class item(models.Model):
@@ -153,7 +155,7 @@ class Humitem(models.Model):
 
     
 
-class needful1(models.Model):
+class needful(models.Model):
     foodTypeOptions=(
          ("Vegetarian","Vegetarian"),
          ("Non Vegetarian","Non Vegetarian"),

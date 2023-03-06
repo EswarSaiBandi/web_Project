@@ -13,7 +13,7 @@ import io
 from location_field.models.plain import PlainLocationField
 
 from hosteldb.settings import LOGIN_URL
-from students.forms import addItemsForm,HumaddItemsForm
+from students.forms import *
 from institute.models import *
 
 
@@ -235,7 +235,7 @@ def NeedFul(request):
             
             # regulation = int(form.cleaned_data['regulation'])
             # if(( (form.cleaned_data['price']>=0) and (form.cleaned_data['quantity_available']>0))):
-            r = needful1(need=need,phone=phone,location=location,foodType=foodType,photo=photo )
+            r = needful(need=need,phone=phone,location=location,foodType=foodType,photo=photo )
             r.save()
             msg = 'Needful has been Added Successfully.'
             return render(request, 'students/needful.html', {'form':form, 'msg':msg,'user':user})
@@ -246,7 +246,30 @@ def NeedFul(request):
 
 def ServeNeedFul(request):
     user = request.user
-    needful=needful1.objects.all()
+    needful1=needful.objects.all()
     form = ServeNeedFulForm()
-    return render(request, 'students/ServeNeedFul.html', {'form':form,'needful': needful,'user':user})
+    return render(request, 'students/ServeNeedFul.html', {'form':form,'needful': needful1,'user':user})
 
+
+def Order(request):
+    user = request.user
+    if request.method == 'POST':
+        form = OrderForm(request.POST)
+        if(form.is_valid()):
+             
+            need = form.cleaned_data['need']
+            phone = form.cleaned_data['phone']
+            photo=form.cleaned_data['photo']
+            foodType=form.cleaned_data['foodType']
+            # city=form.cleaned_data['city']
+            location=form.cleaned_data['location']
+            
+            # regulation = int(form.cleaned_data['regulation'])
+            # if(( (form.cleaned_data['price']>=0) and (form.cleaned_data['quantity_available']>0))):
+            r = needful(need=need,phone=phone,location=location,foodType=foodType,photo=photo )
+            r.save()
+            msg = 'Needful has been Added Successfully.'
+            return render(request, 'students/needful.html', {'form':form, 'msg':msg,'user':user})
+     
+    form = itemsViewForm()
+    return render(request, 'students/Trackitems_list.html', {'form':form,'items': items,'user':user})
