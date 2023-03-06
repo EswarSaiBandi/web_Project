@@ -10,10 +10,10 @@
 {% block content %}
 <div class="row">
   <div class="col-lg-4">
-    <p class="text-center" style="text-align: center; font-size: large; font-weight:bold;">Hello {{student.name}}!
+    <p class="text-center" style="text-align: center; font-size: large; font-weight:bold;">Hello {{customer.name}}!
     </p>
   </div>
-  <div class="col-lg-4 text-center">
+  <!-- <div class="col-lg-4 text-center">
     Outing:
     <div id="rating" class="Stars" style="--rating: {{ outing_rating }};" aria-label="Rating of this product is {{ outing_rating }} out of 5.">   
       <div id="rating-text">
@@ -28,7 +28,7 @@
         {{ discipline_rating }}
       </div>
     </div>
-  </div>
+  </div> -->
 </div>
 <br>
 <div id="test-carousel" class="carousel slide text-center announcements" data-bs-ride="carousel">
@@ -115,7 +115,7 @@
         </tr>
         <tr>
           <th>Customer Id.</th>
-          <td>{{customer.cus_no}}</td>
+          <td>{{customer.cus_id}}</td>
         </tr>
          
          

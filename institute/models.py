@@ -5,7 +5,7 @@ from django.core.exceptions import ValidationError
 from django.conf import settings
 from django.core.validators import MinLengthValidator
 from institute.validators import numeric_only, date_no_future
-
+from location_field.models.plain import PlainLocationField
 from django.utils import timezone
 from django.contrib.auth import get_user_model
 
@@ -49,7 +49,7 @@ class Admin(models.Model):
     # outing_rating = models.DecimalField(null=False,blank=True, default=5.0, max_digits=3, decimal_places=2)
     # discipline_rating = models.DecimalField(null=False, blank=True, default=5.0, max_digits=3, decimal_places=2)
     # specialization = models.CharField(max_length=15, choices=PROGRAMME_OPTIONS, null=False)
-
+    
      
 
    
@@ -94,7 +94,8 @@ class Customer(models.Model):
     # outing_rating = models.DecimalField(null=False,blank=True, default=5.0, max_digits=3, decimal_places=2)
     # discipline_rating = models.DecimalField(null=False, blank=True, default=5.0, max_digits=3, decimal_places=2)
     # specialization = models.CharField(max_length=15, choices=PROGRAMME_OPTIONS, null=False)
-
+    def __str__(self):
+        return str(self.cus_id)
     
 
 
@@ -116,27 +117,61 @@ class Order(models.Model):
 
 
 class item(models.Model):
+    foodTypeOptions=(
+         ("Veg","Veg"),
+         ("Non Veg","Non Veg"),
+    )
     def photo_storage_path(instance, filename):
             extension = filename.split('.')[-1]
             return 'Student-Photos/Year-{}/{}.{}'.format(instance.year, instance.regd_no, extension)
 
-    item_id = models.CharField(unique=True, null=False, max_length=8, validators=[MinLengthValidator(6)])
+    
     quantity_available = models.IntegerField(null=False,default=1)
-    price=models.DecimalField(null=False,blank=False,  max_digits=10, decimal_places=2)
-    # photo = models.ImageField(null=True, blank=True, upload_to=photo_storage_path)
+    price=models.DecimalField(null=False,  max_digits=10, decimal_places=2)
+    photo = models.ImageField(null=True,blank=True, upload_to=photo_storage_path)
+    foodType=models.CharField(max_length=25,null=False,choices=foodTypeOptions,default="Non Veg")
+    seller_id = models.IntegerField( null=False )
+
+    
 
 
 class Humitem(models.Model):
+    foodTypeOptions=(
+         ("Veg","Veg"),
+         ("Non Veg","Non Veg"),
+    )
     def photo_storage_path(instance, filename):
             extension = filename.split('.')[-1]
             return 'Student-Photos/Year-{}/{}.{}'.format(instance.year, instance.regd_no, extension)
 
-    item_id = models.CharField(unique=True, null=False, max_length=8, validators=[MinLengthValidator(6)])
+    
     quantity_available = models.IntegerField(null=False,default=1)
-    # price=models.DecimalField(null=False,blank=False,  max_digits=10, decimal_places=2)
-    # photo = models.ImageField(null=True, blank=True, upload_to=photo_storage_path)
+    # price=models.DecimalField(null=False,  max_digits=10, decimal_places=2)
+    photo = models.ImageField(null=True,blank=True, upload_to=photo_storage_path)
+    foodType=models.CharField(max_length=25,null=False,choices=foodTypeOptions,default="Non Veg")
+    seller_id = models.IntegerField( null=False )
 
+    
 
+class needful1(models.Model):
+    foodTypeOptions=(
+         ("Vegetarian","Vegetarian"),
+         ("Non Vegetarian","Non Vegetarian"),
+    )
+    def photo_storage_path(instance, filename):
+            extension = filename.split('.')[-1]
+            return 'Student-Photos/Year-{}/{}.{}'.format(instance.year, instance.regd_no, extension)
+
+    location = models.CharField(max_length=255)
+    # location = PlainLocationField(based_fields=['city'], zoom=7)
+    photo = models.ImageField(null=True,blank=True, upload_to=photo_storage_path)
+    phone = models.CharField(null=False, max_length=10, validators=[numeric_only])
+    foodType=models.CharField(max_length=25,null=False,choices=foodTypeOptions)
+    need = models.CharField(max_length=255)
+
+    # seller_id = models.IntegerField( null=False )
+
+    
 
 
     

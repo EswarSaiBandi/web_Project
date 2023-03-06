@@ -10,9 +10,11 @@ from django.db.models import F
 from django.contrib import messages
 from django.utils import timezone
 import io
+from location_field.models.plain import PlainLocationField
+
 from hosteldb.settings import LOGIN_URL
 from students.forms import addItemsForm,HumaddItemsForm
-from institute.models import item,Customer,Humitem
+from institute.models import *
 
 
 class StudentTestMixin(UserPassesTestMixin):
@@ -37,10 +39,10 @@ def room_allotment_check(user):
 
 @user_passes_test(customer_check)
 def home(request):
-    user = request.user 
-    print(user)
-    print("hi") 
-    return render(request, 'students/home.html' )
+    user = request.user  
+    customer = user.customer 
+ 
+    return render(request, 'students/home.html',{ 'customer':customer} )
 
 
 
@@ -100,21 +102,25 @@ from django.shortcuts import render
 
 @user_passes_test(customer_check)
 def addItems(request):
+    user = request.user 
     if request.method == 'POST':
         form = addItemsForm(request.POST)
         if(form.is_valid()):
-            item_id = form.cleaned_data['item_id']
+             
             price = form.cleaned_data['price']
             quantity_available = form.cleaned_data['quantity_available']
+            photo=form.cleaned_data['photo']
+            foodType=form.cleaned_data['foodType']
+            seller_id=user.id
             # regulation = int(form.cleaned_data['regulation'])
             # if(( (form.cleaned_data['price']>=0) and (form.cleaned_data['quantity_available']>0))):
-            r = item(item_id=item_id, quantity_available=quantity_available, price=price)
+            r = item(foodType=foodType, quantity_available=quantity_available, price=price,photo=photo,seller_id=seller_id)
             r.save()
-            msg = 'Item Added Successfully.'
-            return render(request, 'students/addItems.html', {'form':form, 'msg':msg})
+            msg = 'Item has been Added Successfully.'
+            return render(request, 'students/addItems.html', {'form':form, 'msg':msg,'user':user})
     else:
         form = addItemsForm()
-    return render(request, 'students/addItems.html', {'form':form})
+    return render(request, 'students/addItems.html', {'form':form,'user':user})
 
  
 
@@ -123,27 +129,41 @@ def itemsView(request):
     user = request.user
     items=item.objects.all()   
     form = itemsViewForm()
-    return render(request, 'students/items_list.html', {'form':form,'items': items})
+    return render(request, 'students/items_list.html', {'form':form,'items': items,'user':user})
+
+
+ 
+def TrackitemsView(request):
+    user = request.user
+    items=item.objects.filter(seller_id=user.id)
+    print(items)
+    form = itemsViewForm()
+    return render(request, 'students/Trackitems_list.html', {'form':form,'items': items,'user':user})
 
 
 @user_passes_test(customer_check)
 def HumaddItems(request):
+    user = request.user 
     if request.method == 'POST':
         form = HumaddItemsForm(request.POST)
         if(form.is_valid()):
-            item_id = form.cleaned_data['item_id']
+             
             # price = form.cleaned_data['price']
             quantity_available = form.cleaned_data['quantity_available']
+            photo=form.cleaned_data['photo']
+            foodType=form.cleaned_data['foodType']
+            seller_id=user.id
             # regulation = int(form.cleaned_data['regulation'])
             # if(( (form.cleaned_data['price']>=0) and (form.cleaned_data['quantity_available']>0))):
-            r = Humitem(item_id=item_id, quantity_available=quantity_available)
+            r = Humitem(foodType=foodType, quantity_available=quantity_available,photo=photo,seller_id=seller_id)
             r.save()
-            msg = 'Item Added Successfully.'
-            return render(request, 'students/addItems.html', {'form':form, 'msg':msg})
+            msg = 'Item has been Added Successfully.'
+            return render(request, 'students/HumaddItems.html', {'form':form, 'msg':msg,'user':user})
     else:
         form = HumaddItemsForm()
-    return render(request, 'students/addItems.html', {'form':form})
+    return render(request, 'students/HumaddItems.html', {'form':form,'user':user})
 
+ 
   
 
 
@@ -151,7 +171,28 @@ def HumitemsView(request):
     user = request.user
     items=Humitem.objects.all()   
     form = HumitemsViewForm()
-    return render(request, 'students/Humitems_list.html', {'form':form,'items': items})
+    return render(request, 'students/TrackHumitems_list.html', {'form':form,'items': items,'user':user})
+
+def TrackHumitemsView(request):
+    user = request.user
+    items=item.objects.filter(seller_id=user.id)
+    print(items)
+    form = itemsViewForm()
+    return render(request, 'students/Trackitems_list.html', {'form':form,'items': items,'user':user})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 def send_birthday_mail():
     # search the query set for birthday and send him email
@@ -176,3 +217,36 @@ def send_birthday_mail():
     #     msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
     #     msg.attach_alternative(html_content, "text/html")
     #     msg.send()
+
+
+@user_passes_test(customer_check)
+def NeedFul(request):
+    user = request.user 
+    if request.method == 'POST':
+        form = NeedFulForm(request.POST)
+        if(form.is_valid()):
+             
+            need = form.cleaned_data['need']
+            phone = form.cleaned_data['phone']
+            photo=form.cleaned_data['photo']
+            foodType=form.cleaned_data['foodType']
+            # city=form.cleaned_data['city']
+            location=form.cleaned_data['location']
+            
+            # regulation = int(form.cleaned_data['regulation'])
+            # if(( (form.cleaned_data['price']>=0) and (form.cleaned_data['quantity_available']>0))):
+            r = needful1(need=need,phone=phone,location=location,foodType=foodType,photo=photo )
+            r.save()
+            msg = 'Needful has been Added Successfully.'
+            return render(request, 'students/needful.html', {'form':form, 'msg':msg,'user':user})
+    else:
+        form = NeedFulForm()
+    return render(request, 'students/needful.html', {'form':form,'user':user})
+
+
+def ServeNeedFul(request):
+    user = request.user
+    needful=needful1.objects.all()
+    form = ServeNeedFulForm()
+    return render(request, 'students/ServeNeedFul.html', {'form':form,'needful': needful,'user':user})
+
