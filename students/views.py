@@ -251,25 +251,86 @@ def ServeNeedFul(request):
     return render(request, 'students/ServeNeedFul.html', {'form':form,'needful': needful1,'user':user})
 
 
-def Order(request):
+def OrderView(request,pk):
     user = request.user
+    print("helloo",user)
     if request.method == 'POST':
         form = OrderForm(request.POST)
         if(form.is_valid()):
-             
-            need = form.cleaned_data['need']
-            phone = form.cleaned_data['phone']
-            photo=form.cleaned_data['photo']
-            foodType=form.cleaned_data['foodType']
-            # city=form.cleaned_data['city']
-            location=form.cleaned_data['location']
+            print(pk)
+            customer_id = user.id
+            item1=item.objects.filter(id=pk)
             
-            # regulation = int(form.cleaned_data['regulation'])
-            # if(( (form.cleaned_data['price']>=0) and (form.cleaned_data['quantity_available']>0))):
-            r = needful(need=need,phone=phone,location=location,foodType=foodType,photo=photo )
+            # print(item.all())
+            seller_id=item1[0].seller_id
+            price=item1[0].price
+            orderStatus='processing'
+            quantity=item1[0].quantity_available
+            quantity=quantity-1
+            print(customer_id,price,orderStatus,seller_id)
+            item.objects.filter(id=pk).update(quantity_available=quantity)
+
+            r = Order(seller_id=seller_id,price=price,orderStatus=orderStatus,customer_id=customer_id )
             r.save()
-            msg = 'Needful has been Added Successfully.'
-            return render(request, 'students/needful.html', {'form':form, 'msg':msg,'user':user})
-     
-    form = itemsViewForm()
-    return render(request, 'students/Trackitems_list.html', {'form':form,'items': items,'user':user})
+            msg = 'Order has been Added Successfully.'
+            return render(request, 'students/Order.html', {'form':form, 'msg':msg,'user':user})
+    
+    form = OrderForm()
+    return render(request, 'students/Order.html', {'form':form,'user':user})
+
+
+ 
+
+
+def SellerOrderView(request):
+    user = request.user
+    orders=Order.objects.filter(seller_id=user.id)
+    form = SellerOrderViewForm()
+    return render(request, 'students/SellerOrderView.html', {'form':form,'orders': orders,'user':user})
+
+
+
+
+
+
+ 
+
+def ChangeOrderStatus(request,pk):
+    user = request.user
+    print("helloo",user)
+    print(pk)
+    r=Order.objects.filter(id=pk)
+    print(r[0].orderStatus)
+    if(r[0].orderStatus=="processing"):
+        r=Order.objects.filter(id=pk).update(orderStatus='prepared')
+         
+    msg = 'Status of the Order has been Successfully changed to Prepared'
+    
+    orders=Order.objects.filter(seller_id=user.id)
+    return render(request, 'students/SellerOrderView.html', {'msg':msg,'user':user,'orders': orders})
+
+
+
+
+def CustomerOrdersView(request):
+    user = request.user
+    orders=Order.objects.filter(customer_id=user.id) 
+    return render(request, 'students/CustomerOrdersView.html', {'orders': orders,'user':user})
+
+
+
+def ChangeOrderStatustoDelivered(request,pk):
+    user = request.user
+    print("helloo",user)
+    print(pk)
+    r=Order.objects.filter(id=pk)
+    print(r[0].orderStatus)
+    if(r[0].orderStatus=="prepared"):
+        r=Order.objects.filter(id=pk).update(orderStatus='delivered')
+         
+    msg = 'Status of the Order has been Successfully changed to delivered' 
+    orders=Order.objects.filter(customer_id=user.id)
+    return render(request, 'students/CustomerOrdersView.html', {'msg':msg,'user':user,'orders': orders})
+
+
+

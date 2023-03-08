@@ -21,6 +21,18 @@ urlpatterns = [
     path('TrackHumitemsView/', views.TrackHumitemsView, name='TrackHumitemsView'),
     path('NeedFul/', views.NeedFul, name='NeedFul'),
     path('ServeNeedFul/', views.ServeNeedFul, name='ServeNeedFul'),
+    # path('Order/', views.Order, name='Order'),
+    path('OrderView/<int:pk>', views.OrderView, name='OrderView'),
+    path('SellerOrderView/', views.SellerOrderView, name='SellerOrderView'),
+    path('ChangeOrderStatus/<int:pk>', views.ChangeOrderStatus, name='ChangeOrderStatus'),
+    
+    path('CustomerOrdersView/', views.CustomerOrdersView, name='CustomerOrdersView'),
+    path('ChangeOrderStatustoDelivered/<int:pk>', views.ChangeOrderStatustoDelivered, name='ChangeOrderStatustoDelivered'),
+
+
+
+
+
 
 
     

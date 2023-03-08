@@ -107,6 +107,49 @@ class ServeNeedFulForm(forms.Form):
 class OrderForm(forms.Form):
     def __init__(self, *args,**kwargs):
         super(OrderForm,self).__init__(*args, **kwargs)
+        foodTypeOptions=(
+        ( None, 'Select'),
+         ("select me","Select me"),
+         
+        )        
+        need = forms.CharField(max_length=25,  widget=forms.Select(choices=foodTypeOptions))
+ 
+        self.fields['need'] = need
+
+       
+class SellerOrderViewForm(forms.Form):
+    def __init__(self, *args,**kwargs):
+        super(SellerOrderViewForm,self).__init__(*args, **kwargs)
+        # foodTypeOptions=(
+        # ( None, 'Select'),
+        #  ("select me","Select me"),
+         
+        # )        
+        # need = forms.CharField(max_length=25,  widget=forms.Select(choices=foodTypeOptions))
+ 
+        # self.fields['need'] = need
+
+
+
+
+        
+
+      
+# class ViewOrderForm(forms.Form):
+#     def __init__(self, *args,**kwargs):
+#         super(OrderForm,self).__init__(*args, **kwargs)
+#         orderStatusOptions=(
+#             ( None, 'Select'),
+#         ('processing','processing'),
+#         ('prepared','prepared'),
+#         ('delivered','delivered'),
+
+#         )
+#         OrderStatus = forms.CharField(max_length=25,  widget=forms.Select(choices=orderStatusOptions))
+#         self.fields['OrderStatus'] = OrderStatus
+        
+        
+        
          
  
 

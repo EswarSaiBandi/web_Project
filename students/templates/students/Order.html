@@ -15,116 +15,15 @@
 
   {{ form|crispy }}
 
- 
-                <div class="row row-cols-1 row-cols-md-3 g-4">
-                  {% for field in items %}
-
-    
-            <div class="col ">
-              <div class="card h-100 ">
-                <img src="https://mdbcdn.b-cdn.net/img/new/standard/city/041.webp" class="card-img-top"
-                  alt="Hollywood Sign on The Hill" />
-                  <td colspan="2" class="text-center">
-                    <img src="{% if field.photo %} {{field.photo.url}} {% endif %}" style="width: 160px; height: auto;" class="mb-3">
-                  </td>
-                <div class="card-body">
-                  
-                  <p class="card-text">
-                    <p><strong>foodType:</strong>
-                      {{ field.foodType }}</p>
-                    <p><strong>Price:</strong>
-                       {{ field.price }}</p>
-                      
-                      <button style="background-color: rgb(111, 175, 206);" class="btn btn-outline-secondary add-btn" >
-                   		<a href="{% url 'students:OrderView' field.id %}" style="text-decoration: none;">
-                        
-                        Order Now
-                      </a>
-                      </button> 
-
-
-                    
-                    <p><strong>Quantity available now!! </strong>{{ field.quantity_available }}</p>
-                    <div class="row-cols-md-3">
-                      <button style="background-color: rgb(111, 175, 206);" class="btn btn-outline-secondary add-btn" >Add to Cart</button>
-                    
-                      <button style="background-color: rgb(111, 175, 206);" class="btn btn-outline-secondary add-btn" >Buy now</button>
-                    </div>
-                    <p>This is a longer card with supporting text below as a natural lead-in to
-                      additional content. This content is a little bit longer.</p>
-                  </p>
-                </div>
-              </div>
-            </div>
-            {% endfor %}
-            </div>
-       
-  <!-- <div class="container">
-    <div class="row">
-        <table class="table table-hover table-muted table-striped">
-            <thead>
-                <tr>
-                    <td style="border: 1px solid black;">foodType </td>
-                    <td style="border: 1px solid black;">price </td>
-                    <td style="border: 1px solid black;">quantity_available </td>
-                     
-                </tr>
-            </thead>
-            {% for field in items %}
-            
-            
-            <tr>
-                <td style="border: 1px solid black;">
-                    {{ field.foodType }}
-                </td>
-                <td style="border: 1px solid black;">
-                    {{ field.price }}
-                </td>
-                <td style="border: 1px solid black;">
-                    {{ field.quantity_available }}
-                </td>
-                
-                
-            </tr>
-          
-            {% endfor %}
-          </div>
-        </table>
-    </div> -->
+  
 
 
 
-
-    <div style="display: flex; flex-direction: row; flex-wrap: wrap">
-
-            {% for field in items %}
-      {#  Single Card Template:#}
-      <div class="card" style="width: 18rem; margin: 10px">
-        <img src="https://mdbcdn.b-cdn.net/img/new/standard/city/041.webp" class="card-img-top" >
-        <div class="card-body">
-          <div style="display: flex; flex-direction: row">
-            <h5 class="card-title">{{field.item_id.name }}</h5>
-            {#  Colored cirlce:#}
-            <!-- <div style="
-              background: {{ card.color }};
-              width: 20px;
-              height: 20px;
-              margin-left: 10px;
-              border-radius: 50%;
-            "></div> -->
-          </div>
-          <p class="card-text">                    {{ field.price }}
-          </p>
-          <a href="/command/{{ card.id }}/color" class="btn btn-primary">Change Color</a>
-          <a href="/command/{{ card.id }}/delete" class="btn btn-primary">Delete</a>
-        </div>
-      </div>
-      {% endfor %}
-    
+  <div class="card-footer">
+    <div class="row justify-content-center">
+      <button type="submit" class="btn btn-warning px-4 py-2">Order</button>
     </div>
-</div>
-
-
+  </div>
   {% if msg %}
     <br>
     <div class="row">
@@ -140,10 +39,6 @@
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
 <script>
-  function addToCart(){
-    print("Yeahhhh")
-
-  }
   function addSelectElement(value){
     let select_element = document.createElement('select');
     select_element.id = 'id_purpose';

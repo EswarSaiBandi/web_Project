@@ -100,23 +100,6 @@ class Customer(models.Model):
 
 
 
-# Create your models here.
-class Order(models.Model):
-    orderStatusOptions=(
-        ('processing','processing'),
-        ('prepared','prepared'),
-        ('delivered','delivered'),
-
-    )
-    customer_id=models.IntegerField(max_length=100)
-    seller_id=models.IntegerField(max_length=100)
-    price=models.DecimalField(max_digits=8, decimal_places=2)
-    rating = models.DecimalField(null=True,blank=True,  max_digits=3, decimal_places=2)
-    review= models.CharField(null=True,blank=True,  max_length=255)
-    orderStatus=models.CharField(choices=orderStatusOptions,max_length=255)
-
- 
-
 
 class item(models.Model):
     foodTypeOptions=(
@@ -176,5 +159,25 @@ class needful(models.Model):
     
 
 
+
+# Create your models here.
+class Order(models.Model):
+    orderStatusOptions=(
+        ('processing','processing'),
+        ('prepared','prepared'),
+        ('delivered','delivered'),
+
+    )
+    
+    customer_id=models.IntegerField(max_length=100)
+    seller_id=models.IntegerField(max_length=100)
+    price=models.DecimalField(max_digits=8, decimal_places=2)
+    rating = models.DecimalField(null=True,blank=True,  max_digits=3, decimal_places=2)
+    review= models.CharField(null=True,blank=True,  max_length=255)
+    orderStatus=models.CharField(choices=orderStatusOptions,max_length=255)
+    
+
+
+ 
     
     
