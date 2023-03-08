@@ -1,76 +1,73 @@
-{% extends 'officials/base_public_forms.html' %}
-{% block title %}View Hum Items{% endblock title %}
+{% extends 'officials/base_officials.html' %}
+{% block title %}View Items{% endblock title %}
 
 
 {% block style_links %}
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 {% endblock style_links %}
-  
-
 {% block content %}
+
 
 {% load crispy_forms_tags %}
 <form method="post">
   {% csrf_token %}
-  <div class="card-body text-capitalize">
-    <div class="row">
-      <div class="col-12">
-        {{ form|crispy }}
-      </div>
-    </div>
-  </div>
+  
+
+  {{ form|crispy }}
+
+ 
+                <div class="row row-cols-1 row-cols-md-3 g-4">
+                  {% for field in items %}
+
+    
+            <div class="col ">
+              <div class="card h-100 ">
+                <img src="https://mdbcdn.b-cdn.net/img/new/standard/city/041.webp" class="card-img-top"
+                  alt="Hollywood Sign on The Hill" />
+                  <td colspan="2" class="text-center">
+                    <img src="{% if field.photo %} {{field.photo.url}} {% endif %}" style="width: 160px; height: auto;" class="mb-3">
+                  </td>
+                <div class="card-body">
+                  
+                  <p class="card-text">
+                    <p><strong>foodType:</strong>
+                      {{ field.foodType }}</p>
+                    <p><strong>Price:</strong>
+                       {{ field.price }}</p>
+                      
+                      <button style="background-color: rgb(111, 175, 206);" class="btn btn-outline-secondary add-btn" >
+                   		<a href="{% url 'students:HumOrderView' field.id %}" style="text-decoration: none;">
+                        
+                        Order Now
+                      </a>
+                      </button> 
 
 
-
-
-
-
-  <div class="container">
-    <div class="row">
-        <table class="table table-hover table-muted table-striped">
-            <thead>
-                <tr>
-                    <td style="border: 1px solid black;">item_id </td>
-                     
-                    <td style="border: 1px solid black;">quantity_available </td>
-                     
-                </tr>
-            </thead>
-            {% for field in items %}
-            <tr>
-                <td style="border: 1px solid black;">
-                    {{ field.item_id }}
-                </td> 
-                <td style="border: 1px solid black;">
-                    {{ field.quantity_available }}
-                </td>
-                
-            </tr>
+                    
+                    <p><strong>Quantity available now!! </strong>{{ field.quantity_available }}</p>
+                    <div class="row-cols-md-3">
+                      <button style="background-color: rgb(111, 175, 206);" class="btn btn-outline-secondary add-btn" >Add to Cart</button>
+                    
+                      <button style="background-color: rgb(111, 175, 206);" class="btn btn-outline-secondary add-btn" >Buy now</button>
+                    </div>
+                    <p>This is a longer card with supporting text below as a natural lead-in to
+                      additional content. This content is a little bit longer.</p>
+                  </p>
+                </div>
+              </div>
+            </div>
             {% endfor %}
-        </table>
-    </div>
+            </div>
+       
+   
+
+
+
+
+   
 </div>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  <!-- <div class="card-footer">
-    <div class="row justify-content-center">
-      <button type="submit" class="btn btn-warning px-4 py-2">Apply</button>
-    </div>
-  </div> -->
   {% if msg %}
     <br>
     <div class="row">
@@ -86,6 +83,10 @@
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
 <script>
+  function addToCart(){
+    print("Yeahhhh")
+
+  }
   function addSelectElement(value){
     let select_element = document.createElement('select');
     select_element.id = 'id_purpose';

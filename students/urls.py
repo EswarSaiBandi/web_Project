@@ -28,7 +28,14 @@ urlpatterns = [
     
     path('CustomerOrdersView/', views.CustomerOrdersView, name='CustomerOrdersView'),
     path('ChangeOrderStatustoDelivered/<int:pk>', views.ChangeOrderStatustoDelivered, name='ChangeOrderStatustoDelivered'),
+   
 
+    path('HumOrderView/<int:pk>', views.HumOrderView, name='HumOrderView'),
+    path('HumSellerOrderView/', views.HumSellerOrderView, name='HumSellerOrderView'),
+    path('HumChangeOrderStatus/<int:pk>', views.HumChangeOrderStatus, name='HumChangeOrderStatus'),
+    
+    path('HumCustomerOrdersView/', views.HumCustomerOrdersView, name='HumCustomerOrdersView'),
+    path('HumChangeOrderStatustoDelivered/<int:pk>', views.HumChangeOrderStatustoDelivered, name='HumChangeOrderStatustoDelivered'),
 
 
 

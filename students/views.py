@@ -175,7 +175,7 @@ def HumitemsView(request):
 
 def TrackHumitemsView(request):
     user = request.user
-    items=item.objects.filter(seller_id=user.id)
+    items=Humitem.objects.filter(seller_id=user.id)
     print(items)
     form = itemsViewForm()
     return render(request, 'students/Trackitems_list.html', {'form':form,'items': items,'user':user})
@@ -248,7 +248,7 @@ def ServeNeedFul(request):
     user = request.user
     needful1=needful.objects.all()
     form = ServeNeedFulForm()
-    return render(request, 'students/ServeNeedFul.html', {'form':form,'needful': needful1,'user':user})
+    return render(request, 'students/ServeNeedFul.html', {'form':form,'needful1': needful1,'user':user})
 
 
 def OrderView(request,pk):
@@ -331,6 +331,93 @@ def ChangeOrderStatustoDelivered(request,pk):
     msg = 'Status of the Order has been Successfully changed to delivered' 
     orders=Order.objects.filter(customer_id=user.id)
     return render(request, 'students/CustomerOrdersView.html', {'msg':msg,'user':user,'orders': orders})
+
+
+
+
+
+
+
+
+def HumOrderView(request,pk):
+    user = request.user 
+    if request.method == 'POST':
+        form = HumOrderForm(request.POST)
+        if(form.is_valid()):
+            print(pk)
+            customer_id = user.id
+            item1=Humitem.objects.filter(id=pk)
+            
+            # print(item.all())
+            seller_id=item1[0].seller_id
+            # price=item1[0].price
+            orderStatus='processing'
+            quantity=item1[0].quantity_available
+            quantity=quantity-1
+            print(customer_id,orderStatus,seller_id)
+            Humitem.objects.filter(id=pk).update(quantity_available=quantity)
+
+            r = HumOrder(seller_id=seller_id,orderStatus=orderStatus,customer_id=customer_id )
+            r.save()
+            msg = 'Order has been Added Successfully.'
+            return render(request, 'students/HumOrder.html', {'form':form, 'msg':msg,'user':user})
+    
+    form = OrderForm()
+    return render(request, 'students/HumOrder.html', {'form':form,'user':user})
+
+
+ 
+
+
+def HumSellerOrderView(request):
+    user = request.user
+    orders=HumOrder.objects.filter(seller_id=user.id)
+    form = HumSellerOrderViewForm()
+    return render(request, 'students/HumSellerOrderView.html', {'form':form,'orders': orders,'user':user})
+
+
+
+
+
+
+ 
+
+def HumChangeOrderStatus(request,pk):
+    user = request.user
+    print("helloo",user)
+    print(pk)
+    r=HumOrder.objects.filter(id=pk)
+    print(r[0].orderStatus)
+    if(r[0].orderStatus=="processing"):
+        r=HumOrder.objects.filter(id=pk).update(orderStatus='prepared')
+         
+    msg = 'Status of the Order has been Successfully changed to Prepared'
+    
+    orders=HumOrder.objects.filter(seller_id=user.id)
+    return render(request, 'students/HumSellerOrderView.html', {'msg':msg,'user':user,'orders': orders})
+
+
+
+
+def HumCustomerOrdersView(request):
+    user = request.user
+    orders=HumOrder.objects.filter(customer_id=user.id) 
+    return render(request, 'students/HumCustomerOrdersView.html', {'orders': orders,'user':user})
+
+
+
+def HumChangeOrderStatustoDelivered(request,pk):
+    user = request.user
+    print("helloo",user)
+    print(pk)
+    r=HumOrder.objects.filter(id=pk)
+    print(r[0].orderStatus)
+    if(r[0].orderStatus=="prepared"):
+        r=HumOrder.objects.filter(id=pk).update(orderStatus='delivered')
+         
+    msg = 'Status of the Order has been Successfully changed to delivered' 
+    orders=HumOrder.objects.filter(customer_id=user.id)
+    return render(request, 'students/HumCustomerOrdersView.html', {'msg':msg,'user':user,'orders': orders})
 
 
 

@@ -1,76 +1,29 @@
-{% extends 'officials/base_public_forms.html' %}
-{% block title %}View Hum Items{% endblock title %}
+{% extends 'officials/base_officials.html' %}
+{% block title %}View Items{% endblock title %}
 
 
 {% block style_links %}
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 {% endblock style_links %}
-  
-
 {% block content %}
+
 
 {% load crispy_forms_tags %}
 <form method="post">
   {% csrf_token %}
-  <div class="card-body text-capitalize">
-    <div class="row">
-      <div class="col-12">
-        {{ form|crispy }}
-      </div>
+  
+
+  {{ form|crispy }}
+
+  
+
+
+
+  <div class="card-footer">
+    <div class="row justify-content-center">
+      <button type="submit" class="btn btn-warning px-4 py-2">Order</button>
     </div>
   </div>
-
-
-
-
-
-
-  <div class="container">
-    <div class="row">
-        <table class="table table-hover table-muted table-striped">
-            <thead>
-                <tr>
-                    <td style="border: 1px solid black;">item_id </td>
-                     
-                    <td style="border: 1px solid black;">quantity_available </td>
-                     
-                </tr>
-            </thead>
-            {% for field in items %}
-            <tr>
-                <td style="border: 1px solid black;">
-                    {{ field.item_id }}
-                </td> 
-                <td style="border: 1px solid black;">
-                    {{ field.quantity_available }}
-                </td>
-                
-            </tr>
-            {% endfor %}
-        </table>
-    </div>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  <!-- <div class="card-footer">
-    <div class="row justify-content-center">
-      <button type="submit" class="btn btn-warning px-4 py-2">Apply</button>
-    </div>
-  </div> -->
   {% if msg %}
     <br>
     <div class="row">

@@ -59,69 +59,12 @@
             {% endfor %}
             </div>
        
-  <!-- <div class="container">
-    <div class="row">
-        <table class="table table-hover table-muted table-striped">
-            <thead>
-                <tr>
-                    <td style="border: 1px solid black;">foodType </td>
-                    <td style="border: 1px solid black;">price </td>
-                    <td style="border: 1px solid black;">quantity_available </td>
-                     
-                </tr>
-            </thead>
-            {% for field in items %}
-            
-            
-            <tr>
-                <td style="border: 1px solid black;">
-                    {{ field.foodType }}
-                </td>
-                <td style="border: 1px solid black;">
-                    {{ field.price }}
-                </td>
-                <td style="border: 1px solid black;">
-                    {{ field.quantity_available }}
-                </td>
-                
-                
-            </tr>
-          
-            {% endfor %}
-          </div>
-        </table>
-    </div> -->
+   
 
 
 
 
-    <div style="display: flex; flex-direction: row; flex-wrap: wrap">
-
-            {% for field in items %}
-      {#  Single Card Template:#}
-      <div class="card" style="width: 18rem; margin: 10px">
-        <img src="https://mdbcdn.b-cdn.net/img/new/standard/city/041.webp" class="card-img-top" >
-        <div class="card-body">
-          <div style="display: flex; flex-direction: row">
-            <h5 class="card-title">{{field.item_id.name }}</h5>
-            {#  Colored cirlce:#}
-            <!-- <div style="
-              background: {{ card.color }};
-              width: 20px;
-              height: 20px;
-              margin-left: 10px;
-              border-radius: 50%;
-            "></div> -->
-          </div>
-          <p class="card-text">                    {{ field.price }}
-          </p>
-          <a href="/command/{{ card.id }}/color" class="btn btn-primary">Change Color</a>
-          <a href="/command/{{ card.id }}/delete" class="btn btn-primary">Delete</a>
-        </div>
-      </div>
-      {% endfor %}
-    
-    </div>
+   
 </div>
 
 
