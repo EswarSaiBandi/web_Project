@@ -18,7 +18,17 @@ class addItemsForm(forms.Form):
          ("Veg","Veg"),
          ("Non Veg","Non Veg"),
         )
+        location=(
+         ( None, 'Select'),
+         ("Hyderabad","Hyderabad"),
+         ("Bangalore","Bangalore"),
+         ("Mumbai","Mumbai"),
+         ("Delhi","Delhi"),
+         ("Kolkota","Kolkota"),
+        )
+
         foodType = forms.CharField(max_length=25,  widget=forms.Select(choices=foodTypeOptions))
+        location = forms.CharField(max_length=25,  widget=forms.Select(choices=location))
 
         # foodType=forms.Select(choices=foodTypeOptions)
         photo=forms.ImageField(required=False,label='Upload Photo')
@@ -31,6 +41,8 @@ class addItemsForm(forms.Form):
         self.fields['quantity_available'] = quantity_available 
         self.fields['price'] = price 
         self.fields['photo'] = photo
+        self.fields['location'] = location
+
         
         
 
@@ -42,7 +54,17 @@ class HumaddItemsForm(forms.Form):
          ("Veg","Veg"),
          ("Non Veg","Non Veg"),
         )
+        location=(
+         ( None, 'Select'),
+         ("Hyderabad","Hyderabad"),
+         ("Bangalore","Bangalore"),
+         ("Mumbai","Mumbai"),
+         ("Delhi","Delhi"),
+         ("Kolkota","Kolkota"),
+        )
+        
         foodType = forms.CharField(max_length=25,  widget=forms.Select(choices=foodTypeOptions))
+        location = forms.CharField(max_length=25,  widget=forms.Select(choices=location))
 
         # foodType=forms.Select(choices=foodTypeOptions)
         photo=forms.ImageField(required=False,label='Upload Photo')
@@ -55,6 +77,8 @@ class HumaddItemsForm(forms.Form):
         self.fields['quantity_available'] = quantity_available 
         # self.fields['price'] = price 
         self.fields['photo'] = photo
+        self.fields['location'] = location
+
          
  
 class itemsViewForm(forms.Form):

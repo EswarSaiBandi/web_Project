@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'institute',
     'officials',
     'students',
+    'payments',
     # 'complaints',
     # 'workers',
     # 'security',
@@ -203,3 +204,10 @@ SERVE_QR_CODE_IMAGE_PATH = 'qr-code-image/'
 # SECURE_HSTS_SECONDS = 31536000
 # SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 # SECURE_HSTS_PRELOAD = True
+
+
+PAYTM_MERCHANT_ID = '<your_merchant_id>'
+PAYTM_SECRET_KEY = '<your_paytm_secret_key>'
+PAYTM_WEBSITE = 'WEBSTAGING'
+PAYTM_CHANNEL_ID = 'WEB'
+PAYTM_INDUSTRY_TYPE_ID = 'Retail'

@@ -8,6 +8,16 @@
 {% endblock style_links %}
 
 {% block content %}
+
+
+<head>
+  <style>
+    .link { color: #FF0000; } /* CSS link color */
+    .link:hover { color: #006eff; }
+  </style>
+</head>
+
+
 <div class="row">
   <div class="col-lg-4">
     <p class="text-center" style="text-align: center; font-size: large; font-weight:bold;">Hello {{customer.name}}!
@@ -54,8 +64,27 @@
     <div class="card" id="present">
       <div class="row">
         <div class="col-8">
+
+          <a class="link" style="text-decoration:none" href="{% url 'students:TotalOrdersView' %}"> 
           <span class="row atttext">Number of Orders As of Now.</span>
-          <span class="row attnum">{{ total_number_of_orders }}</span>
+          </a>
+          <span class="row attnum">{{ Total_Number_Of_Orders }}</span>
+         
+          <a class="link" style="text-decoration:none" href="{% url 'students:TotalOrdersViewProcessing' %}"> 
+          <span class="row atttext">Number of Orders Processing As of Now.</span>
+        </a>
+          <span class="row attnum">{{ Total_Number_Of_Orders_Processing }}</span>
+ 
+          <a class="link" style="text-decoration:none" href="{% url 'students:TotalOrdersViewPrepared' %}"> 
+          <span class="row atttext">Number of Orders Prepared As of Now.</span>
+        </a>
+          <span class="row attnum">{{ Total_Number_Of_Orders_Prepared }}</span>
+ 
+          <a class="link" style="text-decoration:none" href="{% url 'students:TotalOrdersViewDelivered' %}"> 
+          <span class="row atttext">Number of Orders Delivered As of Now.</span>
+        </a>
+          <span class="row attnum">{{ Total_Number_Of_Orders_Delivered }}</span>
+ 
         </div>
         <div class="col-4">
           <span class="atticon"><i class="fa fa-user-plus"></i></span>
@@ -67,6 +96,7 @@
     <div class="card" id="absent">
       <div class="row">
         <div class="col-8">
+          
           <span class="row atttext">Number of Cancelled Orders.</span>
           <span class="row attnum">{{ total_number_of_orders_cancelled }}</span>
         </div>
