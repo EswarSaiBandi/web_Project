@@ -30,7 +30,7 @@ SECRET_KEY = env('SECRET_KEY')
 DEBUG = env("DEBUG") == "False"
 # DEBUG = os.environ.get("DEBUG", False)
 
-ALLOWED_HOSTS = ['.versal.app','.now.sh']
+ALLOWED_HOSTS = ['.versal.app','.now.sh','*']
 
 
 # Application definition
