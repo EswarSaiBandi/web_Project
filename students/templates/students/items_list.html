@@ -112,12 +112,42 @@ body {
     </form>
   </div>
   <div>
-    <form action="{% url 'students:SearchByCost' %}" method="post">
+    <form action="{% url 'students:Filtering' %}" method="post">
     {% csrf_token %}
     <input id="search" name="search" type="text" class="query-search" 
      placeholder="Filter By Price...">
+
+
+     <select id="search1" name="search1" >
+      <option value="Any">Select Location to filter</option>
+      <option value="Hyderabad">Hyderabad</option>
+      <option value="Bangalore">Bangalore</option>
+      <option value="Mumbai">Mumbai</option>
+      <option value="Delhi">Delhi</option>
+      <option value="Delhi">Kolkota</option>
+
+    </select>
+
+
     <input class="btn btn-primary" type="submit" value="submit">
     </form>
+
+ 
+
+
+
+
+
+
+
+
+ </form>
+
+
+
+ 
+
+
     </div>
 
 </div>

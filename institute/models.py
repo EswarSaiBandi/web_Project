@@ -193,6 +193,15 @@ class Order(models.Model):
         ('delivered','delivered'),
 
     )
+    location=(
+         ("Hyderabad","Hyderabad"),
+         ("Bangalore","Bangalore"),
+         ("Mumbai","Mumbai"),
+         ("Delhi","Delhi"),
+         ("Kolkota","Kolkota"),
+
+
+    )
     foodTypeOptions=(
          ("Veg","Veg"),
          ("Non Veg","Non Veg"),
@@ -204,7 +213,9 @@ class Order(models.Model):
     rating = models.DecimalField(null=True,blank=True,  max_digits=3, decimal_places=2)
     review= models.CharField(null=True,blank=True,  max_length=255)
     orderStatus=models.CharField(choices=orderStatusOptions,max_length=255)
-    foodType=models.CharField(max_length=25,null=False,choices=foodTypeOptions,default="Non Veg")
+    foodType=models.CharField(max_length=25,null=False,choices=foodTypeOptions)
+    location=models.CharField(max_length=25,null=False,choices=location)
+
 
     
 

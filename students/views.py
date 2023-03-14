@@ -287,11 +287,13 @@ def OrderView(request,pk):
             foodType=item1[0].foodType
             orderStatus='processing'
             quantity=item1[0].quantity_available
+            location=item1[0].location
+            
             quantity=quantity-1
             print(customer_id,price,orderStatus,seller_id)
             item.objects.filter(id=pk).update(quantity_available=quantity)
 
-            r = Order(seller_id=seller_id,price=price,orderStatus=orderStatus,customer_id=customer_id,foodType=foodType )
+            r = Order(seller_id=seller_id,price=price,orderStatus=orderStatus,customer_id=customer_id,foodType=foodType,location=location )
             r.save() 
             messages.success(request, 'Order has been Ordered Successfully.')
 
@@ -451,20 +453,6 @@ def HumChangeOrderStatustoDelivered(request,pk):
 
 
 
-def SearchByCost(request):
-    if request.method == 'POST':
-        user = request.user
-        searchWord = request.POST.get('search','')
-        items=item.objects.all()
-        items1=[]
-        for i in range(len(items)): 
-            if(items[i].price<=int(searchWord)):
-                    items1.append(items[i])
-            
-        
-        messages.success(request, 'Items have been Successfully Filtered.')
-        return render(request, 'students/items_list.html', {'user':user,'items': items1})
-    
  
 
 
@@ -507,4 +495,45 @@ def TotalOrdersViewDelivered(request):
     messages.success(request, 'Displaying all the Orders that are delivered')
     return render(request, 'students/TotalOrdersView.html', {'user':user,'orders': orders,'Humorders':Humorders})
 
+
+
+def Filtering(request):
+    if request.method == 'POST':
+        user = request.user
+        searchWord = request.POST.get('search','')
+         
+        items=item.objects.all()
+        items1=[]
+        for i in range(len(items)): 
+            if(searchWord==''):
+                items1=items
+            elif(items[i].price<=int(searchWord)):
+                    items1.append(items[i])
+        print(items1)
+
+        searchWord1 = request.POST.get('search1','')
+        
+        items2=item.objects.all()
+        items3=[] 
+        for i in range(len(items2)): 
+            if(searchWord1=="Any"):
+                    items3=items2
+                    break
+            elif(items2[i].location==(searchWord1)):
+                    items3.append(items[i])
+        
+
+        print(items3)
+
+        items4=[]
+        for i in range(len(items1)):
+            for j in range(len(items3)):
+                if(items1[i].id==items3[j].id):
+                    items4.append(items1[i])
+
+        print(items4)
+        
+        
+        messages.success(request, 'Items have been Successfully Filtered.')
+        return render(request, 'students/items_list.html', {'user':user,'items': items4})
 

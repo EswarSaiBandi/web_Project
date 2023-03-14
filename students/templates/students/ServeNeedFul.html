@@ -33,6 +33,7 @@
                             {{ field.phone }}</p>
                             <p><strong>foodType:</strong>
                                 {{ field.foodType }}</p>
+                                  
                                 <p><strong>Need:</strong>
                                     {{ field.need }}</p>
                     
@@ -51,38 +52,7 @@
             {% endfor %}
             </div>
        
-  <div class="container">
-    <div class="row">
-        <table class="table table-hover table-muted table-striped">
-            <thead>
-                <tr>
-                    <td style="border: 1px solid black;">item_id </td>
-                    <td style="border: 1px solid black;">price </td>
-                    <td style="border: 1px solid black;">quantity_available </td>
-                     
-                </tr>
-            </thead>
-            {% for field in items %}
-            
-            
-            <tr>
-                <td style="border: 1px solid black;">
-                    {{ field.item_id }}
-                </td>
-                <td style="border: 1px solid black;">
-                    {{ field.price }}
-                </td>
-                <td style="border: 1px solid black;">
-                    {{ field.quantity_available }}
-                </td>
-                
-            </tr>
-          
-            {% endfor %}
-          </div>
-        </table>
-    </div>
-
+ 
 
 
 
