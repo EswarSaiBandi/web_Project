@@ -117,18 +117,23 @@ from django.shortcuts import render
 def addItems(request):
     user = request.user 
     if request.method == 'POST':
-        form = addItemsForm(request.POST)
+        form = addItemsForm(request.POST,request.FILES)
         if(form.is_valid()):
              
             price = form.cleaned_data['price']
             quantity_available = form.cleaned_data['quantity_available']
             photo=form.cleaned_data['photo']
+            print(request.POST)
+            print(request.FILES)
+
+            print(photo)
             foodType=form.cleaned_data['foodType']
             seller_id=user.id
             location=form.cleaned_data['location']
             # regulation = int(form.cleaned_data['regulation'])
             # if(( (form.cleaned_data['price']>=0) and (form.cleaned_data['quantity_available']>0))):
-            r = item(foodType=foodType, quantity_available=quantity_available, price=price,photo=photo,seller_id=seller_id,location=location)
+            r = item(foodType=foodType, quantity_available=quantity_available, price=price,seller_id=seller_id,location=location)
+            r.photo_storage_path(request.POST["photo"])
             r.save()          
             print("hiiii")  
             messages.success(request, 'Item has been Added Successfully.')

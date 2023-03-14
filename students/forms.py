@@ -41,7 +41,7 @@ class addItemsForm(forms.Form):
         self.fields['quantity_available'] = quantity_available 
         self.fields['price'] = price 
         self.fields['photo'] = photo
-        self.fields['location'] = location
+        self.fields['location'] = location 
 
         
         

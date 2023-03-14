@@ -120,12 +120,14 @@ class item(models.Model):
     
     def photo_storage_path(instance, filename):
             extension = filename.split('.')[-1]
-            return 'Student-Photos/Year-{}/{}.{}'.format(instance.year, instance.regd_no, extension)
+            print("checkingg")
+
+            return 'Student-Photos/Year-{}.{}'.format( instance.id, extension)
 
     
     quantity_available = models.IntegerField(null=False,default=1)
     price=models.DecimalField(null=False,  max_digits=10, decimal_places=2)
-    photo = models.ImageField(null=True,blank=True, upload_to=photo_storage_path)
+    photo = models.FileField(null=True,blank=True, upload_to=photo_storage_path)
     foodType=models.CharField(max_length=25,null=False,choices=foodTypeOptions)
     seller_id = models.IntegerField( null=False )
     location=models.CharField(max_length=25,null=False,choices=location)

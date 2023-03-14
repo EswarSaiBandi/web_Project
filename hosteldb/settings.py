@@ -30,7 +30,7 @@ SECRET_KEY = env('SECRET_KEY')
 DEBUG = env("DEBUG") == "False"
 # DEBUG = os.environ.get("DEBUG", False)
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['.versal.app','.now.sh']
 
 
 # Application definition
@@ -211,3 +211,7 @@ PAYTM_SECRET_KEY = '<your_paytm_secret_key>'
 PAYTM_WEBSITE = 'WEBSTAGING'
 PAYTM_CHANNEL_ID = 'WEB'
 PAYTM_INDUSTRY_TYPE_ID = 'Retail'
+
+import os 
+STATICFILES_DIRS = os.path.join(BASE_DIR, 'static'), 
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles_build', 'static')
