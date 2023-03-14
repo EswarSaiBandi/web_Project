@@ -20,11 +20,12 @@
     ],
 "routes": [
     {
-        "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+        "rewrites": [{ "source": "/(.*)", "destination": "institute/index.html" }]
     },
     {
         "src": "/(.*)",
-        "dest": "hosteldb/wsgi.py"
+        "dest": "hosteldb/wsgi.py",
+        "methods": [ "GET", "POST", "PUT", "PATCH", "DELETE" ]
     }
 
 ]
