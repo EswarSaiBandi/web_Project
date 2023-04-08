@@ -96,9 +96,11 @@
     <div class="card" id="absent">
       <div class="row">
         <div class="col-8">
-          
+
+          <a class="link" style="text-decoration:none" href="{% url 'students:TotalOrdersViewCancelled' %}"> 
           <span class="row atttext">Number of Cancelled Orders.</span>
-          <span class="row attnum">{{ total_number_of_orders_cancelled }}</span>
+          </a> 
+          <span class="row attnum">{{ Total_Number_Of_Orders_Cancelled }}</span>
         </div>
         <div class="col-4">
           <span class="atticon"><i class="fa fa-user-times"></i></span>
@@ -110,8 +112,14 @@
     <div class="card" id="comps">
       <div class="row">
         <div class="col-8">
-          <span class="row atttext">Number of orders to be delivered.</span>
-          <span class="row attnum">{{ total_number_of_orders_to_be_delivered }}</span>
+          <a class="link" style="text-decoration:none" href="{% url 'students:TotalOrdersViewToBeDelivered' %}"> 
+            <span class="row atttext">Number of orders to be delivered.</span>
+
+            </a> 
+            
+          
+
+          <span class="row attnum">{{ Total_Number_Of_Orders_ToBeDelivered }}</span>
         </div>
         <div class="col-4">
           <span class="atticon"><i class="fa fa-font-awesome"></i></span>

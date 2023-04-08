@@ -1,12 +1,7 @@
-from unicodedata import decimal
-from django.db import models
-from django.db.models import Q
-from django.core.exceptions import ValidationError
+from django.db import models 
 from django.conf import settings
 from django.core.validators import MinLengthValidator
-from institute.validators import numeric_only, date_no_future
-from location_field.models.plain import PlainLocationField
-from django.utils import timezone
+from institute.validators import numeric_only, date_no_future 
 from django.contrib.auth import get_user_model
 
 
@@ -124,10 +119,10 @@ class item(models.Model):
 
             return 'Student-Photos/Year-{}.{}'.format( instance.id, extension)
 
-    
+    name=models.CharField(max_length=255,null=False)
     quantity_available = models.IntegerField(null=False,default=1)
     price=models.DecimalField(null=False,  max_digits=10, decimal_places=2)
-    photo = models.FileField(null=True,blank=True, upload_to=photo_storage_path)
+    photo = models.FileField(null=True,blank=True)
     foodType=models.CharField(max_length=25,null=False,choices=foodTypeOptions)
     seller_id = models.IntegerField( null=False )
     location=models.CharField(max_length=25,null=False,choices=location)
@@ -156,6 +151,8 @@ class Humitem(models.Model):
 
     
     quantity_available = models.IntegerField(null=False,default=1)
+    name=models.CharField(max_length=255,null=False)
+
     # price=models.DecimalField(null=False,  max_digits=10, decimal_places=2)
     photo = models.ImageField(null=True,blank=True, upload_to=photo_storage_path)
     foodType=models.CharField(max_length=25,null=False,choices=foodTypeOptions,default="Non Veg")
@@ -217,6 +214,7 @@ class Order(models.Model):
     orderStatus=models.CharField(choices=orderStatusOptions,max_length=255)
     foodType=models.CharField(max_length=25,null=False,choices=foodTypeOptions)
     location=models.CharField(max_length=25,null=False,choices=location)
+    name=models.CharField(max_length=255,null=False)
 
 
     
@@ -246,8 +244,14 @@ class HumOrder(models.Model):
     review= models.CharField(null=True,blank=True,  max_length=255)
     orderStatus=models.CharField(choices=orderStatusOptions,max_length=255)
     foodType=models.CharField(max_length=25,null=False,choices=foodTypeOptions,default="Non Veg")
+    name=models.CharField(max_length=255,null=False)
 
     
+from django.db import models  
+class Employee(models.Model):  
+    firstname= models.CharField(null=True,blank=True,  max_length=50)
+    lastname= models.CharField(null=True,blank=True,  max_length=50)
+    account_email = models.EmailField(unique=True, null=True, blank=True)
+    seller_id=models.IntegerField(max_length=100)
 
-
-    
+    file      = models.FileField()

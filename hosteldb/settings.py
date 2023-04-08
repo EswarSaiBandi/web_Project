@@ -156,9 +156,9 @@ EMAIL_HOST_PASSWORD=env("APP_EMAIL_PASSWORD")
 EMAIL_PORT=587
 EMAIL_USE_TLS=True
 EMAIL_USE_SSL=False
-
-MEDIA_ROOT= os.path.join(BASE_DIR, 'media/')
-MEDIA_URL= "/media/"
+ 
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
 
 
 if env("ENVIRONMENT") == "development":

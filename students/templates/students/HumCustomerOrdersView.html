@@ -32,21 +32,116 @@
                         {{ field.orderStatus }}</p>
                     <p><strong>Price:</strong>
                        {{ field.price }}</p>
+                    <p><strong>Name: </strong>{{ field.name }}</p>
+
                        <p><strong>Location:</strong>
                         {{ field.location }}</p>
                        
+                        <p><strong>Review:</strong>
+                          {{ field.review }}</p>
                        
-                       <button type="submit" style="background-color: rgb(111, 175, 206);" class="btn btn-outline-secondary add-btn" >
-                        <a href="{% url 'students:HumChangeOrderStatustoDelivered' field.id %}" style="text-decoration: none;">
-                           
-                            
-                            Delivered
+                          <p><strong>Rating:</strong>
+                            {{ field.rating }}</p>
+                         
+                        {% if field.orderStatus == 'prepared' %}
+                        <button type="submit" style="background-color: rgb(111, 175, 206);" class="btn btn-outline-secondary add-btn" >
+                          <a href="{% url 'students:HumChangeOrderStatustoDelivered' field.id %}" style="text-decoration: none;">
+                             
+                        
+                              Delivered
+                              
+   
+                          </a> 
+                         </button> 
  
-                        </a>
-                </button> 
+                        {% endif %}
 
-           
+               
 
+
+
+ 
+
+                        
+
+                        <form action="{% url 'students:HumRating' field.id %}" method="post">
+                          
+ 
+                           {% csrf_token %}
+                           <select id="search" name="search" >
+                            <option value="0.0">Rate the food item</option>
+                             <option value="1.0">1.0</option>
+                             <option value="1.5">1.5</option>
+                             <option value="2.0">2.0</option>
+                             <option value="2.5">2.5</option>
+                             <option value="3.0">3.0</option>
+                             <option value="3.5">3.5</option>
+                             <option value="4.0">4.0</option>
+                             <option value="4.5">4.5</option>
+                             <option value="5.0">5.0</option>
+ 
+ 
+                           </select>
+ 
+                           <input class="btn btn-primary" type="submit" value="submit">
+                       
+                           </form>
+
+
+                        
+                        
+
+
+                        <form action="{% url 'students:HumReview' field.id %}" method="post">
+                        {% if field.orderStatus == 'delivered' %}
+                     
+                          {% csrf_token %}
+                          <input id="search" name="search" type="text" class="query-search" 
+                           placeholder="Review...">
+               
+                          <input class="btn btn-primary" type="submit" value="submit">
+                          
+                          
+                          {% endif %}
+                        </form>
+                          
+
+
+
+                        {% if field.orderStatus != 'delivered' %}
+                        {% if field.orderStatus != 'cancelled' %}
+                        <button type="submit" style="background-color: rgb(111, 175, 206);" class="btn btn-outline-secondary add-btn" >
+                          <a href="{% url 'students:HumCancelOrder' field.id %}" style="text-decoration: none;">
+                            
+
+                              Cancel
+
+                          </a> 
+                        </button> 
+                        {% endif %} 
+                        {% endif %}
+
+
+
+
+
+
+                        {% if field.rating != None %}
+                       
+                        <div class="rating-star">
+                         <span title="{{ field.rating }}/5">
+                         
+                             <i class="fa fa-star{% if field.rating < 0.5%}-o{% elif field.rating >= 0.5 and field.rating < 1 %}-half-o{% endif %}" aria-hidden="true"></i>
+                             <i class="fa fa-star{% if field.rating < 1.5%}-o{% elif field.rating >= 1.5 and field.rating < 2 %}-half-o{% endif %}" aria-hidden="true"></i>
+                             <i class="fa fa-star{% if field.rating < 2.5%}-o{% elif field.rating >= 2.5 and field.rating < 3 %}-half-o{% endif %}" aria-hidden="true"></i>
+                             <i class="fa fa-star{% if field.rating < 3.5%}-o{% elif field.rating >= 3.5 and field.rating < 4 %}-half-o{% endif %}" aria-hidden="true"></i>
+                             <i class="fa fa-star{% if field.rating < 4.5%}-o{% elif field.rating >= 4.5 and field.rating < 5 %}-half-o{% endif %}" aria-hidden="true"></i>
+                         </span>
+                         <span><strong>( {{ field.rating }}/5 )</strong></span>
+                        </div>
+                        {% endif %}
+
+ 
                   </p>
                 </div>
               </div>

@@ -32,13 +32,21 @@
                        {{ field.price }}</p>
                        
                        
-                       <button type="submit" style="background-color: rgb(111, 175, 206);" class="btn btn-outline-secondary add-btn" >
-                        <a href="{% url 'students:HumChangeOrderStatus' field.id %}" style="text-decoration: none;">
-                           
-                            
-                            Prepared
- 
-                        </a>
+                       
+
+
+                        {% if field.orderStatus == 'processing' %}
+                <button type="submit" style="background-color: rgb(111, 175, 206);" class="btn btn-outline-secondary add-btn" >
+                  <a href="{% url 'students:HumChangeOrderStatus' field.id %}" style="text-decoration: none;">
+                     
+                
+                      Prepared
+                      
+
+                  </a> 
+                 </button> 
+
+                {% endif %}
                 </button> 
                        
 

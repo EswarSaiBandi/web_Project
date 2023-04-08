@@ -40,21 +40,28 @@ urlpatterns = [
     path('TotalOrdersViewProcessing/', views.TotalOrdersViewProcessing, name='TotalOrdersViewProcessing'),
     path('TotalOrdersViewPrepared/', views.TotalOrdersViewPrepared, name='TotalOrdersViewPrepared'),
     path('TotalOrdersViewDelivered/', views.TotalOrdersViewDelivered, name='TotalOrdersViewDelivered'),
+    path('TotalOrdersViewCancelled/', views.TotalOrdersViewCancelled, name='TotalOrdersViewCancelled'),
+    path('TotalOrdersViewToBeDelivered/', views.TotalOrdersViewToBeDelivered, name='TotalOrdersViewToBeDelivered'),
+
+
     path('Filtering/', views.Filtering, name='Filtering'),
-     
-
     
-
-    
-
-
-
-
-
-    
-
-
-
-    
-    
+    path('HumCancelOrder/<int:pk>', views.HumCancelOrder, name='HumCancelOrder'),
+    path('CancelOrder/<int:pk>', views.CancelOrder, name='CancelOrder'),
+    path('Review/<int:pk>', views.Review, name='Review'),
+    path('HumReview/<int:pk>', views.HumReview, name='HumReview'),
+    path('Rating/<int:pk>', views.Rating, name='Rating'),
+    path('HumRating/<int:pk>', views.HumRating, name='HumRating'),
+    path('trial/', views.trial, name='trial'),    
 ]
+
+
+
+from django.contrib import admin
+from django.urls import path
+from django.conf import settings
+from django.conf.urls.static import static
+from .views import *
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL,
+                          document_root=settings.MEDIA_ROOT)

@@ -10,7 +10,7 @@
 {% block content %}
 
 {% load crispy_forms_tags %}
-<form method="post">
+<form method="post" enctype="multipart/form-data">
   {% csrf_token %}
   <div class="card-body text-capitalize">
     <div class="row">
@@ -241,6 +241,6 @@
 
   document.getElementById('id_purpose').addEventListener('change', purposeEventListener);
 
-</script>
+</script> 
 {% endblock script_links %}
   

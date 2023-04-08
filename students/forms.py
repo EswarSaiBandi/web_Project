@@ -1,18 +1,10 @@
-from django import forms
-from django.utils import timezone
-from institute.models import item,Humitem,Customer
-from django_auth.models import User
-from django.db.models import Q
-from location_field.models.plain import PlainLocationField
-
-from institute.validators import numeric_only
+from django import forms 
 
 
  
 
 class addItemsForm(forms.Form):
-    def __init__(self, *args,**kwargs):
-        super(addItemsForm, self).__init__(*args, **kwargs)
+     
         foodTypeOptions=(
         ( None, 'Select'),
          ("Veg","Veg"),
@@ -29,26 +21,20 @@ class addItemsForm(forms.Form):
 
         foodType = forms.CharField(max_length=25,  widget=forms.Select(choices=foodTypeOptions))
         location = forms.CharField(max_length=25,  widget=forms.Select(choices=location))
-
-        # foodType=forms.Select(choices=foodTypeOptions)
-        photo=forms.ImageField(required=False,label='Upload Photo')
-
+        name = forms.CharField(max_length=255)
+ 
         price=forms.DecimalField(label='Enter Price')
          
         quantity_available=forms.IntegerField(label='Enter Quantity')
+        file      = forms.FileField() # for creating file input  
  
-        self.fields['foodType'] = foodType
-        self.fields['quantity_available'] = quantity_available 
-        self.fields['price'] = price 
-        self.fields['photo'] = photo
-        self.fields['location'] = location 
+      
+
 
         
         
 
 class HumaddItemsForm(forms.Form):
-    def __init__(self, *args,**kwargs):
-        super(HumaddItemsForm, self).__init__(*args, **kwargs)
         foodTypeOptions=(
         ( None, 'Select'),
          ("Veg","Veg"),
@@ -62,22 +48,18 @@ class HumaddItemsForm(forms.Form):
          ("Delhi","Delhi"),
          ("Kolkota","Kolkota"),
         )
-        
+
         foodType = forms.CharField(max_length=25,  widget=forms.Select(choices=foodTypeOptions))
         location = forms.CharField(max_length=25,  widget=forms.Select(choices=location))
-
-        # foodType=forms.Select(choices=foodTypeOptions)
-        photo=forms.ImageField(required=False,label='Upload Photo')
-
+        name = forms.CharField(max_length=255)
+ 
         # price=forms.DecimalField(label='Enter Price')
          
         quantity_available=forms.IntegerField(label='Enter Quantity')
+        file      = forms.FileField() # for creating file input  
  
-        self.fields['foodType'] = foodType
-        self.fields['quantity_available'] = quantity_available 
-        # self.fields['price'] = price 
-        self.fields['photo'] = photo
-        self.fields['location'] = location
+      
+     
 
          
  
@@ -96,8 +78,7 @@ class HumitemsViewForm(forms.Form):
 
 
 class NeedFulForm(forms.Form):
-    def __init__(self, *args,**kwargs):
-        super(NeedFulForm, self).__init__(*args, **kwargs)
+     
         foodTypeOptions=(
         ( None, 'Select'),
          ("Vegetarian","Vegetarian"),
@@ -105,22 +86,18 @@ class NeedFulForm(forms.Form):
         )
         foodType = forms.CharField(max_length=25,  widget=forms.Select(choices=foodTypeOptions))
 
-        # foodType=forms.Select(choices=foodTypeOptions)
-        photo=forms.ImageField(required=False,label='Upload Photo')
+         
+        file      = forms.FileField() # for creating file input  
+
         phone=forms.CharField(max_length=10)
         need=forms.CharField(max_length=255)
         location = forms.CharField(max_length=255)
-        # location = PlainLocationField(based_fields=['city'], zoom=7)
-        # price=forms.DecimalField(label='Enter Price')
-          
- 
-        self.fields['foodType'] = foodType
-        self.fields['need'] = need
-        # self.fields['price'] = price 
-        self.fields['photo'] = photo
-        self.fields['phone'] = phone
-        # self.fields['city'] = city
-        self.fields['location'] = location
+       
+
+
+
+  
+         
         
 
 
@@ -163,12 +140,15 @@ class HumSellerOrderViewForm(forms.Form):
     def __init__(self, *args,**kwargs):
         super(HumSellerOrderViewForm,self).__init__(*args, **kwargs)
         
-
-
-
-        
+from django import forms  
+class trialForm(forms.Form):  
+    
+    
+    firstname = forms.CharField(label="Enter first name",max_length=50)  
+    lastname  = forms.CharField(label="Enter last name", max_length = 10)  
+    email     = forms.EmailField(label="Enter Email")  
+    file      = forms.FileField() # for creating file input  
  
-        
         
 
  

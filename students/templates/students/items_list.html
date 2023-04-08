@@ -7,6 +7,7 @@
 {% endblock style_links %}
 {% block content %}
 
+{% load static %}
 
 {% load crispy_forms_tags %}
 <form method="post">
@@ -124,10 +125,11 @@ body {
       <option value="Bangalore">Bangalore</option>
       <option value="Mumbai">Mumbai</option>
       <option value="Delhi">Delhi</option>
-      <option value="Delhi">Kolkota</option>
+      <option value="Kolkota  ">Kolkota</option>
 
     </select>
-
+    <input id="search2" name="search2" type="text" class="query-search" 
+    placeholder="Filter By Name...">
 
     <input class="btn btn-primary" type="submit" value="submit">
     </form>
@@ -169,15 +171,16 @@ body {
 
 
  
-                <div class="row row-cols-1 row-cols-md-3 g-4">
+<div class="row row-cols-1 row-cols-md-3 g-4">
                   {% for field in items %}
 
     
             <div class="col ">
               <div class="card h-100 ">
-                <img src="https://mdbcdn.b-cdn.net/img/new/standard/city/041.webp" class="card-img-top"
-                  alt="Hollywood Sign on The Hill" />
+                <!-- <img src="https://mdbcdn.b-cdn.net/img/new/standard/city/041.webp" class="card-img-top"
+                  alt="Hollywood Sign on The Hill" /> -->
                   <td colspan="2" class="text-center">
+                 
                     <img src="{% if field.photo %} {{field.photo.url}} {% endif %}" style="width: 160px; height: auto;" class="mb-3">
                   </td>
                 <div class="card-body">
@@ -187,10 +190,12 @@ body {
                       {{ field.foodType }}</p>
                     <p><strong>Price:</strong>
                        {{ field.price }}</p>
+                       <p><strong>Photo:</strong>
+                        {{ field.photo }}</p>
                       
                       <button style="background-color: rgb(111, 175, 206);" class="btn btn-outline-secondary add-btn" >
                    		<a href="{% url 'students:OrderView' field.id %}" style="text-decoration: none;">
-                        
+
                         Order Now
                       </a>
                       </button> 
@@ -198,6 +203,7 @@ body {
 
                     
                     <p><strong>Quantity available now!! </strong>{{ field.quantity_available }}</p>
+                    <p><strong>Name: </strong>{{ field.name }}</p>
                     <p><strong>Location: </strong>{{ field.location }}</p>
 
                    
@@ -206,7 +212,7 @@ body {
               </div>
             </div>
             {% endfor %}
-            </div>
+</div>
        
    
 
@@ -234,11 +240,7 @@ body {
 
 <script>
 
-  
-  function addToCart(){
-    print("Yeahhhh")
-
-  }
+   
   function addSelectElement(value){
     let select_element = document.createElement('select');
     select_element.id = 'id_purpose';

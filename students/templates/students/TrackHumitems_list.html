@@ -32,8 +32,7 @@
                   <p class="card-text">
                     <p><strong>foodType:</strong>
                       {{ field.foodType }}</p>
-                    <p><strong>Price:</strong>
-                       {{ field.price }}</p>
+                    
                       
                       <button style="background-color: rgb(111, 175, 206);" class="btn btn-outline-secondary add-btn" >
                    		<a href="{% url 'students:HumOrderView' field.id %}" style="text-decoration: none;">
@@ -45,6 +44,8 @@
 
                     
                     <p><strong>Quantity available now!! </strong>{{ field.quantity_available }}</p>
+                    <p><strong>Name: </strong>{{ field.name }}</p>
+
                     <p><strong>Location: </strong>{{ field.location }}</p>
 
                   </p>

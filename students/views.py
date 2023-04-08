@@ -1,31 +1,14 @@
-from audioop import reverse
-from django.shortcuts import get_object_or_404, render, redirect
-from django.http import Http404, HttpResponse, FileResponse
-from django.contrib.messages.views import SuccessMessageMixin
-from django.contrib.auth.decorators import user_passes_test
-from django.views.generic import CreateView, ListView
-from django.contrib.auth.mixins import UserPassesTestMixin
-from django.urls import reverse_lazy
-from django.db.models import F
-from django.contrib import messages
-from django.utils import timezone
-import io
-from location_field.models.plain import PlainLocationField
 
-from hosteldb.settings import LOGIN_URL
+from django.shortcuts import render
+from django.http import HttpResponse
+from django.contrib.auth.decorators import user_passes_test  
+from django.contrib import messages 
+
 from students.forms import *
 from institute.models import *
 
-
-class StudentTestMixin(UserPassesTestMixin):
-    def test_func(self):
-        return self.request.user.is_authenticated and (self.request.user.is_student or self.request.user.is_customer)
-
-class RoomAllotmentTestMixin(UserPassesTestMixin):
-    def test_func(self):
-        if (self.request.user.is_student or self.request.user.is_customer) and self.request.user.student.roomdetail and self.request.user.student.roomdetail.room()!='-':
-            return True
-        return False
+ 
+ 
 
 def student_check(user):
     return user.is_authenticated and (user.is_student or user.is_customer or user.is_admin)
@@ -49,13 +32,25 @@ def home(request):
     r5=len(HumOrder.objects.filter(orderStatus="prepared",customer_id=customer.id))
     r6=len(Order.objects.filter(orderStatus="delivered",customer_id=customer.id))
     r7=len(HumOrder.objects.filter(orderStatus="delivered",customer_id=customer.id))
+    
+
     r8=r+r1
     r9=r2+r3
     r10=r4+r5
     r11=r6+r7
+    r12=len(Order.objects.filter(orderStatus="cancelled",customer_id=customer.id))
+    r13=len(HumOrder.objects.filter(orderStatus="cancelled",customer_id=customer.id))
+    r14=r12+r13
+    r15=len(Order.objects.filter(orderStatus="processing",customer_id=customer.id))
+    r16=len(Order.objects.filter(orderStatus="prepared",customer_id=customer.id))
+    r17=len(HumOrder.objects.filter(orderStatus="processing",customer_id=customer.id))
+    r18=len(HumOrder.objects.filter(orderStatus="prepared",customer_id=customer.id))
+    r19=r15+r16+r17+r18
+
+    
 
  
-    return render(request, 'students/home.html',{ 'customer':customer,'Total_Number_Of_Orders':r8,'Total_Number_Of_Orders_Processing':r9,'Total_Number_Of_Orders_Prepared':r10,'Total_Number_Of_Orders_Delivered':r11} )
+    return render(request, 'students/home.html',{ 'customer':customer,'Total_Number_Of_Orders':r8,'Total_Number_Of_Orders_Processing':r9,'Total_Number_Of_Orders_Prepared':r10,'Total_Number_Of_Orders_Delivered':r11,'Total_Number_Of_Orders_Cancelled':r14,'Total_Number_Of_Orders_ToBeDelivered':r19} )
 
 
 
@@ -106,6 +101,8 @@ def  humanitySeller(request):
 
 
 
+
+
  
 
 from django.contrib.auth.decorators import user_passes_test
@@ -116,31 +113,28 @@ from django.shortcuts import render
 @user_passes_test(customer_check)
 def addItems(request):
     user = request.user 
+
     if request.method == 'POST':
+         
         form = addItemsForm(request.POST,request.FILES)
+        
         if(form.is_valid()):
-             
+            
             price = form.cleaned_data['price']
             quantity_available = form.cleaned_data['quantity_available']
-            photo=form.cleaned_data['photo']
-            print(request.POST)
-            print(request.FILES)
-
-            print(photo)
+            file=form.cleaned_data['file']
+            name=form.cleaned_data['name']
             foodType=form.cleaned_data['foodType']
             seller_id=user.id
-            location=form.cleaned_data['location']
-            # regulation = int(form.cleaned_data['regulation'])
-            # if(( (form.cleaned_data['price']>=0) and (form.cleaned_data['quantity_available']>0))):
-            r = item(foodType=foodType, quantity_available=quantity_available, price=price,seller_id=seller_id,location=location)
-            r.photo_storage_path(request.POST["photo"])
-            r.save()          
-            print("hiiii")  
+            location=form.cleaned_data['location'] 
+            r = item(foodType=foodType, quantity_available=quantity_available, price=price,seller_id=seller_id,location=location,name=name,photo=file)
+             
+            r.save()  
+
             messages.success(request, 'Item has been Added Successfully.')
 
-            return render(request, 'students/businessSeller.html', {'form':form,'user':user})
+            return render(request, 'students/home.html', {'form':form,'user':user})
     else:
-       
         form = addItemsForm()
     return render(request, 'students/addItems.html', {'form':form,'user':user})
 
@@ -167,22 +161,26 @@ def TrackitemsView(request):
 @user_passes_test(customer_check)
 def HumaddItems(request):
     user = request.user 
+
     if request.method == 'POST':
-        form = HumaddItemsForm(request.POST)
+         
+        form = HumaddItemsForm(request.POST,request.FILES)
+        
         if(form.is_valid()):
              
-            # price = form.cleaned_data['price']
             quantity_available = form.cleaned_data['quantity_available']
-            photo=form.cleaned_data['photo']
+            file=form.cleaned_data['file']
+            name=form.cleaned_data['name']
             foodType=form.cleaned_data['foodType']
             seller_id=user.id
-            location=form.cleaned_data['location']
-            r = Humitem(foodType=foodType, quantity_available=quantity_available,photo=photo,seller_id=seller_id,location=location)
-            r.save() 
-            messages.success(request, 'Item has been Added Successfully.')
+            location=form.cleaned_data['location'] 
+            r = Humitem(foodType=foodType, quantity_available=quantity_available,seller_id=seller_id,location=location,name=name,photo=file)
+             
+            r.save()  
 
-            
-            return render(request, 'students/HumaddItems.html', {'form':form ,'user':user})
+            messages.success(request, 'Hum Item has been Added Successfully.')
+
+            return render(request, 'students/home.html', {'form':form,'user':user})
     else:
         form = HumaddItemsForm()
     return render(request, 'students/HumaddItems.html', {'form':form,'user':user})
@@ -249,21 +247,19 @@ def NeedFul(request):
     if request.method == 'POST':
         form = NeedFulForm(request.POST)
         if(form.is_valid()):
-             
+            file=form.cleaned_data['file']
             need = form.cleaned_data['need']
             phone = form.cleaned_data['phone']
-            photo=form.cleaned_data['photo']
             foodType=form.cleaned_data['foodType']
-            # city=form.cleaned_data['city']
             location=form.cleaned_data['location']
             
             # regulation = int(form.cleaned_data['regulation'])
             # if(( (form.cleaned_data['price']>=0) and (form.cleaned_data['quantity_available']>0))):
-            r = needful(need=need,phone=phone,location=location,foodType=foodType,photo=photo )
+            r = needful(need=need,phone=phone,location=location,foodType=foodType,photo=file )
             r.save() 
             messages.success(request, 'Needful has been Added Successfully.')
 
-            return render(request, 'students/needful.html', {'form':form,'user':user})
+            return render(request, 'students/home.html', {'form':form,'user':user})
     else:
         form = NeedFulForm()
     return render(request, 'students/needful.html', {'form':form,'user':user})
@@ -293,16 +289,17 @@ def OrderView(request,pk):
             orderStatus='processing'
             quantity=item1[0].quantity_available
             location=item1[0].location
+            name=item1[0].name
             
             quantity=quantity-1
             print(customer_id,price,orderStatus,seller_id)
             item.objects.filter(id=pk).update(quantity_available=quantity)
 
-            r = Order(seller_id=seller_id,price=price,orderStatus=orderStatus,customer_id=customer_id,foodType=foodType,location=location )
+            r = Order(seller_id=seller_id,price=price,orderStatus=orderStatus,customer_id=customer_id,foodType=foodType,location=location,name=name )
             r.save() 
             messages.success(request, 'Order has been Ordered Successfully.')
 
-            return render(request, 'students/business.html', {'form':form, 'user':user})
+            return render(request, 'students/home.html', {'form':form, 'user':user})
     
     form = OrderForm()
     return render(request, 'students/Order.html', {'form':form,'user':user})
@@ -355,6 +352,7 @@ def ChangeOrderStatustoDelivered(request,pk):
     print(pk)
     r=Order.objects.filter(id=pk)
     print(r[0].orderStatus)
+    
     if(r[0].orderStatus=="prepared"):
         r=Order.objects.filter(id=pk).update(orderStatus='delivered')
          
@@ -363,6 +361,7 @@ def ChangeOrderStatustoDelivered(request,pk):
     orders=Order.objects.filter(customer_id=user.id)
     return render(request, 'students/CustomerOrdersView.html', {'user':user,'orders': orders})
 
+  
 
 
 
@@ -385,11 +384,13 @@ def HumOrderView(request,pk):
             # price=item1[0].price
             orderStatus='processing'
             quantity=item1[0].quantity_available
+            name=item1[0].name
+
             quantity=quantity-1
             print(customer_id,orderStatus,seller_id)
             Humitem.objects.filter(id=pk).update(quantity_available=quantity)
 
-            r = HumOrder(seller_id=seller_id,orderStatus=orderStatus,customer_id=customer_id,foodType=foodType )
+            r = HumOrder(seller_id=seller_id,orderStatus=orderStatus,customer_id=customer_id,foodType=foodType,name=name )
             r.save()
             
             messages.success(request, 'Order has been Added Successfully.')
@@ -458,6 +459,35 @@ def HumChangeOrderStatustoDelivered(request,pk):
 
 
 
+def HumCancelOrder(request,pk):
+    user = request.user
+
+    r=HumOrder.objects.filter(id=pk)
+    print(r[0].orderStatus)
+    if(r[0].orderStatus!="delivered"):
+        r=HumOrder.objects.filter(id=pk).update(orderStatus='cancelled')
+         
+    messages.success(request, 'Status of the Order has been Successfully Cancelled.')
+
+    orders=HumOrder.objects.filter(customer_id=user.id)
+    return render(request, 'students/HumCustomerOrdersView.html', {'user':user,'orders': orders})
+
+
+def CancelOrder(request,pk):
+    user = request.user
+
+    r=Order.objects.filter(id=pk)
+    print(r[0].orderStatus)
+    if(r[0].orderStatus!="delivered"):
+        r=Order.objects.filter(id=pk).update(orderStatus='cancelled')
+         
+    messages.success(request, 'Status of the Order has been Successfully Cancelled.')
+
+    orders=Order.objects.filter(customer_id=user.id)
+    print(orders)
+    return render(request, 'students/CustomerOrdersView.html', {'user':user,'orders': orders})
+
+
  
 
 
@@ -491,6 +521,22 @@ def TotalOrdersViewPrepared(request):
     return render(request, 'students/TotalOrdersView.html', {'user':user,'orders': orders,'Humorders':Humorders})
 
 
+def TotalOrdersViewCancelled(request):
+    user=request.user
+
+    orders=Order.objects.filter(customer_id=user.id,orderStatus='cancelled')
+    Humorders=HumOrder.objects.filter(customer_id=user.id,orderStatus='cancelled')
+    messages.success(request, 'Displaying all the Orders that are cancelled')
+    return render(request, 'students/TotalOrdersView.html', {'user':user,'orders': orders,'Humorders':Humorders})
+
+def TotalOrdersViewToBeDelivered(request):
+    user=request.user
+
+    orders=Order.objects.filter(customer_id=user.id,orderStatus='prepared')
+    Humorders=HumOrder.objects.filter(customer_id=user.id,orderStatus='prepared')
+    messages.success(request, 'Displaying all the Orders that are yet to be delivered')
+    return render(request, 'students/TotalOrdersView.html', {'user':user,'orders': orders,'Humorders':Humorders})
+
 
 def TotalOrdersViewDelivered(request):
     user=request.user
@@ -506,6 +552,8 @@ def Filtering(request):
     if request.method == 'POST':
         user = request.user
         searchWord = request.POST.get('search','')
+        searchWord2 = request.POST.get('search2','')
+
          
         items=item.objects.all()
         items1=[]
@@ -535,10 +583,81 @@ def Filtering(request):
             for j in range(len(items3)):
                 if(items1[i].id==items3[j].id):
                     items4.append(items1[i])
-
+        items5=[]
         print(items4)
+        for i in range(len(items4)): 
+            if(searchWord2==''):
+                items5=items4
+            elif(items[i].name==searchWord2):
+                    items5.append(items4[i])
+        print(items5)
+        
         
         
         messages.success(request, 'Items have been Successfully Filtered.')
-        return render(request, 'students/items_list.html', {'user':user,'items': items4})
+        return render(request, 'students/items_list.html', {'user':user,'items': items5})
 
+
+ 
+  
+
+
+def Review(request,pk):
+    if request.method == 'POST':
+        print("hiii")
+        user = request.user
+        searchWord = request.POST.get('search','')
+        Order.objects.filter(id=pk).update(review=searchWord)
+        orders=Order.objects.filter(customer_id=user.id)        
+        messages.success(request, 'Review have been Successfully Added.')
+
+        return render(request, 'students/CustomerOrdersView.html', {'user':user,'orders': orders})
+
+def HumReview(request,pk):
+    if request.method == 'POST':
+        user = request.user
+        searchWord = request.POST.get('search','')
+        HumOrder.objects.filter(id=pk).update(review=searchWord)
+        orders=HumOrder.objects.filter(customer_id=user.id)        
+        messages.success(request, 'Review have been Successfully Added.')
+
+        return render(request, 'students/HumCustomerOrdersView.html', {'user':user,'orders': orders})
+
+
+def Rating(request,pk):
+    if request.method == 'POST':
+        user = request.user
+        searchWord = request.POST.get('search','')
+        Order.objects.filter(id=pk).update(rating=searchWord)
+        print(Order.objects.filter(id=pk))
+        orders=Order.objects.filter(customer_id=user.id) 
+
+        messages.success(request, 'Rating have been Successfully Added.')
+
+        return render(request, 'students/CustomerOrdersView.html', {'user':user,'orders': orders})
+
+def HumRating(request,pk):
+    if request.method == 'POST':
+        user = request.user
+        searchWord = request.POST.get('search','')
+        HumOrder.objects.filter(id=pk).update(rating=searchWord)
+        orders=HumOrder.objects.filter(customer_id=user.id)        
+        messages.success(request, 'Rating have been Successfully Added.')
+        return render(request, 'students/HumCustomerOrdersView.html', {'user':user,'orders': orders})
+
+
+
+
+from django.shortcuts import render  
+from django.http import HttpResponse  
+from students.functions import handle_uploaded_file  
+def trial(request):  
+    if request.method == 'POST':  
+        student = trialForm(request.POST, request.FILES)  
+        if student.is_valid():  
+            handle_uploaded_file(request.FILES['file'])  
+            return HttpResponse("File uploaded successfuly")  
+    else:  
+        student = trialForm()  
+        return render(request,"students/trial.html",{'form':student})  
+  
