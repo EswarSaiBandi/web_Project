@@ -14,9 +14,7 @@ def student_check(user):
     return user.is_authenticated and (user.is_student or user.is_customer or user.is_admin)
 
 def customer_check(user):
-    return user.is_authenticated  and user.is_customer 
-def room_allotment_check(user):
-    return user.is_authenticated and user.is_student and user.student.roomdetail and user.student.roomdetail.room()!='-'
+    return user.is_authenticated  and user.is_customer  
 
 # Create your views here.
 
