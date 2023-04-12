@@ -115,7 +115,7 @@ class item(models.Model):
     
     def photo_storage_path(instance, filename):
             extension = filename.split('.')[-1]
-            print("checkingg")
+             
 
             return 'Student-Photos/Year-{}.{}'.format( instance.id, extension)
 
@@ -154,7 +154,8 @@ class Humitem(models.Model):
     name=models.CharField(max_length=255,null=False)
 
     # price=models.DecimalField(null=False,  max_digits=10, decimal_places=2)
-    photo = models.ImageField(null=True,blank=True, upload_to=photo_storage_path)
+    photo = models.FileField(null=True,blank=True)
+
     foodType=models.CharField(max_length=25,null=False,choices=foodTypeOptions,default="Non Veg")
     seller_id = models.IntegerField( null=False )
     location=models.CharField(max_length=25,null=False,choices=location)
@@ -173,7 +174,8 @@ class needful(models.Model):
 
     location = models.CharField(max_length=255)
     # location = PlainLocationField(based_fields=['city'], zoom=7)
-    photo = models.ImageField(null=True,blank=True, upload_to=photo_storage_path)
+    photo = models.FileField(null=True,blank=True)
+    name=models.CharField(max_length=255)
     phone = models.CharField(null=False, max_length=10, validators=[numeric_only])
     foodType=models.CharField(max_length=25,null=False,choices=foodTypeOptions)
     need = models.CharField(max_length=255)
@@ -198,8 +200,6 @@ class Order(models.Model):
          ("Mumbai","Mumbai"),
          ("Delhi","Delhi"),
          ("Kolkota","Kolkota"),
-
-
     )
     foodTypeOptions=(
          ("Veg","Veg"),
@@ -215,6 +215,8 @@ class Order(models.Model):
     foodType=models.CharField(max_length=25,null=False,choices=foodTypeOptions)
     location=models.CharField(max_length=25,null=False,choices=location)
     name=models.CharField(max_length=255,null=False)
+    photo = models.FileField(null=True,blank=True)
+
 
 
     
@@ -236,6 +238,14 @@ class HumOrder(models.Model):
          ("Veg","Veg"),
          ("Non Veg","Non Veg"),
     )
+    location=(
+         ("Hyderabad","Hyderabad"),
+         ("Bangalore","Bangalore"),
+         ("Mumbai","Mumbai"),
+         ("Delhi","Delhi"),
+         ("Kolkota","Kolkota"),
+    )
+
     
     customer_id=models.IntegerField(max_length=100)
     seller_id=models.IntegerField(max_length=100)
@@ -243,8 +253,11 @@ class HumOrder(models.Model):
     rating = models.DecimalField(null=True,blank=True,  max_digits=3, decimal_places=2)
     review= models.CharField(null=True,blank=True,  max_length=255)
     orderStatus=models.CharField(choices=orderStatusOptions,max_length=255)
-    foodType=models.CharField(max_length=25,null=False,choices=foodTypeOptions,default="Non Veg")
+    foodType=models.CharField(max_length=25,null=False,choices=foodTypeOptions)
+    location=models.CharField(max_length=25,null=False,choices=location)
     name=models.CharField(max_length=255,null=False)
+    photo = models.FileField(null=True,blank=True)
+
 
     
 from django.db import models  

@@ -52,7 +52,6 @@ urlpatterns = [
     path('HumReview/<int:pk>', views.HumReview, name='HumReview'),
     path('Rating/<int:pk>', views.Rating, name='Rating'),
     path('HumRating/<int:pk>', views.HumRating, name='HumRating'),
-    path('trial/', views.trial, name='trial'),    
 ]
 
 

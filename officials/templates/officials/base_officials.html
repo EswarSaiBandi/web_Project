@@ -58,24 +58,15 @@
   
       <div class="">
         
-        {% if request.user.is_official %}
-        <a href="{% url 'officials:profile' %}"><i class="fa fa-user-circle-o nav-icon"></i></a>
-        {% endif %}
-        {% if request.user.is_student %}
-        <a href="{% url 'students:home' %}"><i class="fa fa-user-circle-o nav-icon"></i></a>
-        {% endif %}
+       
+        
         {% if request.user.is_customer %}
         <a href="{% url 'students:home' %}"><i class="fa fa-user-circle-o nav-icon"></i></a>
         {% endif %}
         {% if request.user.is_admin %}
         <a href="{% url 'students:home' %}"><i class="fa fa-user-circle-o nav-icon"></i></a>
         {% endif %}
-        {% if request.user.is_worker %}
-        <a href="{% url 'workers:home' %}"><i class="fa fa-user-circle-o nav-icon"></i></a>
-        {% endif %}
-        {% if request.user.is_security %}
-        <a href="{% url 'security:home' %}"><i class="fa fa-user-circle-o nav-icon"></i></a>
-        {% endif %}
+   
       </div>
     </div>
   </nav>
@@ -86,17 +77,9 @@
     <a style="cursor: pointer;" class="closebtn" onclick="closeNav()">&times;</a>
     {% with url_name=request.resolver_match.url_name %}
  
-
-
-  
-   
-       
-
-
+ 
               <ul >
-               
-                 
-
+             
                 <li  data-toggle="collapse" data-target="#Business" class="collapsed active">
                   <a href="#"><i class="fa fa-briefcase" ></i> Business <span class="arrow"></span></a>
                 </li>
@@ -105,7 +88,6 @@
                     
                     <li><a href="{% url 'students:itemsView' %}">Buy</a></li>
                     <li><a href="{% url 'students:CustomerOrdersView' %}">Orders So Far</a></li> 
-                    <li><a href="{% url 'students:trial' %}">trial</a></li> 
  
 
 

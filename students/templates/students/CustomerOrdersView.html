@@ -7,7 +7,7 @@
 {% endblock style_links %}
 {% block content %}
 
-
+{% load static %}
 {% load crispy_forms_tags %}
 <form method="post">
   {% csrf_token %}
@@ -19,24 +19,24 @@
     
             <div class="col ">
               <div class="card h-100 ">
-                <img src="https://mdbcdn.b-cdn.net/img/new/standard/city/041.webp" class="card-img-top"
-                  alt="Hollywood Sign on The Hill" />
-                  <img src="" alt="">
+
+                 
+                  <img src="{% if field.photo %} {{field.photo.url}} {% endif %}" style="width:80%; height: 300px;" class="mb-3">
+                 
+
                 <div class="card-body">
                   
                   <p class="card-text">
 
+                    <strong>Name: </strong>{{ field.name }}</p>
 
-                    <p><strong>customer_id</strong>
-                      {{ field.customer_id }}</p>
-                      <p><strong>seller_id</strong>
-                        {{ field.seller_id }}</p>
+                    
                       <p><strong>order status</strong>
                         {{ field.orderStatus }}</p>
                     <p><strong>Price:</strong>
                        {{ field.price }}</p>
-                       <p><strong>Name: </strong>{{ field.name }}</p>
-
+                        
+                        
                        <p><strong>Location:</strong>
                         {{ field.location }}</p>
                         <p><strong>Review:</strong>
@@ -57,13 +57,25 @@
                          </button> 
  
                         {% endif %}
+                        {% if field.orderStatus != 'delivered' %}
+                        {% if field.orderStatus != 'cancelled' %}
+                        <button type="submit" style="background-color: rgb(111, 175, 206);" class="btn btn-outline-secondary add-btn" >
+                          <a href="{% url 'students:CancelOrder' field.id %}" style="text-decoration: none;">
+                            
 
+                              Cancel
+
+                          </a> 
+                        </button> 
+                        {% endif %} 
+                        {% endif %}
                
 
 
 
  
 
+                        {% if field.orderStatus == 'delivered' %}
                         
 
                         <form action="{% url 'students:Rating' field.id %}" method="post">
@@ -88,6 +100,7 @@
                            <input class="btn btn-primary" type="submit" value="submit">
                        
                            </form>
+                           {% endif %}
 
 
                         
@@ -110,18 +123,7 @@
 
 
 
-                        {% if field.orderStatus != 'delivered' %}
-                        {% if field.orderStatus != 'cancelled' %}
-                        <button type="submit" style="background-color: rgb(111, 175, 206);" class="btn btn-outline-secondary add-btn" >
-                          <a href="{% url 'students:CancelOrder' field.id %}" style="text-decoration: none;">
-                            
-
-                              Cancel
-
-                          </a> 
-                        </button> 
-                        {% endif %} 
-                        {% endif %}
+                      
 
 
 
@@ -153,229 +155,51 @@
  
 
  </div>
+ 
 
 
-  {% if msg %}
-    <br>
-    <div class="row">
-        <strong>{{msg}}</strong>
-    </div>
-  {% endif %}
+
+
+ 
+<div class="row row-cols-1 row-cols-md-3 g-4">
+                  {% for field in items %}
+
+    
+            <div class="col ">
+              <div class="card h-100 ">
+                
+                  <td colspan="2" class="text-center"> 
+                    <img src="{% if field.photo %} {{field.photo.url}} {% endif %}" style="width:80%; height: 300px;" class="mb-3">
+                  </td>
+                <div class="card-body">
+                  
+                  <p class="card-text">
+                    
+                    <p><strong>foodType:</strong>
+                      {{ field.foodType }}</p>
+                    <p><strong>Price:</strong>
+                       {{ field.price }}</p>
+                      
+                    <p><strong>Quantity available now!! </strong>{{ field.quantity_available }}</p>
+                    <p><strong>Location: </strong>{{ field.location }}</p>
+
+                    <button style="background-color: rgb(111, 175, 206);" class="btn btn-outline-secondary add-btn" >
+                      <a href="{% url 'students:OrderView' field.id %}" style="text-decoration: none;">
+
+                       Order Now
+                     </a>
+                     </button> 
+
+                   
+                  </p>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+</div>
+
 </form>
   
 {% endblock content %}
 
-
-{% block script_links %}
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-
-<script>
-  function addToCart(){
-    print("Yeahhhh")
-
-  }
-  function addSelectElement(value){
-    let select_element = document.createElement('select');
-    select_element.id = 'id_purpose';
-    select_element.className = 'select form-control';
-    select_element.required = true;
-    select_element.name = 'purpose';
-    let div_element = document.getElementById('div2_id_purpose');
-    div_element.appendChild(select_element);
-    let option1 = document.createElement('option');
-    option1.value = '';
-    option1.innerHTML = '------------';
-    option1.selected = true;
-    let option2 = document.createElement('option');
-    option2.value = 'Family Related';
-    if (value==option2.value){
-      option2.selected = true;
-    }
-    option2.innerHTML = 'Family Related';
-    let option3 = document.createElement('option');
-    option3.value = 'Medical Emergency';
-    if (value == option3.value){
-      option3.selected = true;
-    }
-    option3.innerHTML = 'Medical Emergency';
-    select_element.appendChild(option1);
-    select_element.appendChild(option2);
-    select_element.appendChild(option3);
-    document.getElementById('id_purpose').addEventListener('change', purposeEventListener);
-  }
-  function addTextElement(){
-    let text_element = document.createElement('input');
-    text_element.id = 'id_purpose';
-    text_element.className = 'textinput textInput form-control';
-    text_element.required = true;
-    text_element.name = 'purpose';
-    text_element.type = 'text';
-    let div_element = document.getElementById('div2_id_purpose');
-    div_element.appendChild(text_element);
-    document.getElementById('id_purpose').addEventListener('change', purposeEventListener);
-  }
-
-  function purposeEventListener(){
-    if (document.getElementById('id_type').value == 'Emergency'){
-      if (document.getElementById('id_purpose').value == 'Medical Emergency'){
-        document.getElementById('div_id_emergency_medical_issue').hidden = false;
-        document.getElementById('id_emergency_medical_issue').required = true;
-        document.querySelector("label[for='id_emergency_medical_issue']").className = ' requiredField'
-        document.querySelector("label[for='id_emergency_medical_issue']").innerHTML += '<span class="asteriskField">*</span>'
-      }
-      else{
-        if (document.getElementById('div_id_emergency_medical_issue')!=null){
-          document.getElementById('div_id_emergency_medical_issue').hidden = true;
-          document.getElementById('id_emergency_medical_issue').required = false;
-          document.querySelector("label[for='id_emergency_medical_issue']").className = ''
-        }
-      }
-    }
-    else{
-      if (document.getElementById('div_id_emergency_medical_issue')!=null){
-        document.getElementById('div_id_emergency_medical_issue').hidden = true;
-        document.getElementById('id_emergency_medical_issue').required = false;
-        document.querySelector("label[for='id_emergency_medical_issue']").className = ''
-      }
-    }
-  }
-
-
-  document.getElementById('id_purpose').parentNode.id = 'div2_id_purpose';
-  if (document.getElementById('id_type').value == 'Emergency'){
-    if (document.getElementById('id_purpose').value == 'Medical Emergency'){
-      document.getElementById('div_id_emergency_medical_issue').hidden = false;
-      document.getElementById('id_emergency_medical_issue').required = true;
-      document.querySelector("label[for='id_emergency_medical_issue']").className = ' requiredField'
-        document.querySelector("label[for='id_emergency_medical_issue']").innerHTML += '<span class="asteriskField">*</span>'
-    }
-    else{
-      if (document.getElementById('div_id_emergency_medical_issue')!=null){
-        document.getElementById('div_id_emergency_medical_issue').hidden = true;
-        document.getElementById('id_emergency_medical_issue').required = false;
-        document.querySelector("label[for='id_emergency_medical_issue']").className = ''
-      }
-    }
-  }
-  else{
-    if (document.getElementById('div_id_emergency_medical_issue')!=null){
-      document.getElementById('div_id_emergency_medical_issue').hidden = true;
-      document.getElementById('id_emergency_medical_issue').required = false;
-      document.querySelector("label[for='id_emergency_medical_issue']").className = ''
-    }
-  }
-  if (document.getElementById('id_type').value=='Local' || document.getElementById('id_type').value==''){
-    document.getElementById('div_id_mode_of_journey_from').style['display'] = 'None';
-    document.getElementById('div_id_mode_of_journey_to').style['display'] = 'None';
-    document.getElementById('div_id_emergency_contact').style['display'] = 'None';
-    document.getElementById('id_mode_of_journey_from').value = 'NA';
-    document.getElementById('id_mode_of_journey_to').value = 'NA';
-    document.getElementById('id_emergency_contact').value = 0;
-    if (document.getElementById('id_purpose').type != 'text'){
-      document.getElementById('id_purpose').remove();
-      addTextElement();
-    }
-    if (document.getElementById('div_id_emergency_medical_issue')!=null){
-      document.getElementById('div_id_emergency_medical_issue').hidden = true;
-    }
-  }
-  else{
-    document.getElementById('div_id_mode_of_journey_from').style['display'] = '';
-    document.getElementById('div_id_mode_of_journey_to').style['display'] = '';
-    document.getElementById('div_id_emergency_contact').style['display'] = '';
-    if (document.getElementById('id_mode_of_journey_from').value == 'NA'){
-      document.getElementById('id_mode_of_journey_from').value = '';
-    }
-    if(document.getElementById('id_mode_of_journey_to').value == 'NA'){
-      document.getElementById('id_mode_of_journey_to').value = '';
-    }
-    if (document.getElementById('id_emergency_contact').value == 0){
-      document.getElementById('id_emergency_contact').value = '';
-    }
-    if (document.getElementById('id_type').value=='Emergency'){
-      if (document.getElementById('id_purpose').type != 'select-one'){
-        value = document.getElementById('id_purpose').value;
-        document.getElementById('id_purpose').remove();
-        addSelectElement(value);
-      }
-    }
-    else if(document.getElementById('id_type').value=='Non-Local'){
-      if (document.getElementById('id_purpose').type != 'text'){
-        document.getElementById('id_purpose').remove();
-        addTextElement();
-      }
-      if (document.getElementById('div_id_emergency_medical_issue')!=null){
-        document.getElementById('div_id_emergency_medical_issue').hidden = true;
-      }
-    }
-  }
-
-
-  flatpickr('#id_fromDate', {
-    altInput: true,
-    altFormat: "M j, Y H:i",
-    enableTime: true,
-    minDate: "today",
-    time_24hr: true
-  });
-  flatpickr('#id_toDate', {
-    altInput: true,
-    altFormat: "M j, Y H:i",
-    enableTime: true,
-    minDate: "today",
-    time_24hr: true
-  });
-
-  document.getElementById('id_type').addEventListener('change', function(){
-    if (this.value=='Local' || this.value==''){
-      document.getElementById('div_id_mode_of_journey_from').style['display'] = 'None';
-      document.getElementById('div_id_mode_of_journey_to').style['display'] = 'None';
-      document.getElementById('div_id_emergency_contact').style['display'] = 'None';
-      document.getElementById('id_mode_of_journey_from').value = 'NA';
-      document.getElementById('id_mode_of_journey_to').value = 'NA';
-      document.getElementById('id_emergency_contact').value = 0;
-      if (document.getElementById('id_purpose').type != 'text'){
-      document.getElementById('id_purpose').remove();
-      addTextElement();
-      }
-      if (document.getElementById('div_id_emergency_medical_issue')!=null){
-        document.getElementById('div_id_emergency_medical_issue').hidden = true;
-      }
-    }
-    else{
-      document.getElementById('div_id_mode_of_journey_from').style['display'] = '';
-      document.getElementById('div_id_mode_of_journey_to').style['display'] = '';
-      document.getElementById('div_id_emergency_contact').style['display'] = '';
-      if (document.getElementById('id_mode_of_journey_from').value == 'NA'){
-        document.getElementById('id_mode_of_journey_from').value = '';
-      }
-      if(document.getElementById('id_mode_of_journey_to').value == 'NA'){
-        document.getElementById('id_mode_of_journey_to').value = '';
-      }
-      if (document.getElementById('id_emergency_contact').value == 0){
-        document.getElementById('id_emergency_contact').value = '';
-      }
-      if (document.getElementById('id_type').value=='Emergency'){
-        if (document.getElementById('id_purpose').type != 'select-one'){
-          value = document.getElementById('id_purpose').value;
-          document.getElementById('id_purpose').remove();
-          addSelectElement(value);
-        }
-      }
-      else if(document.getElementById('id_type').value=='Non-Local'){
-        if (document.getElementById('id_purpose').type != 'text'){
-          document.getElementById('id_purpose').remove();
-          addTextElement();
-        }
-        if (document.getElementById('div_id_emergency_medical_issue')!=null){
-          document.getElementById('div_id_emergency_medical_issue').hidden = true;
-        }
-      }
-    }
-  });
-
-  document.getElementById('id_purpose').addEventListener('change', purposeEventListener);
-
-</script>
-{% endblock script_links %}
-  
+ 
